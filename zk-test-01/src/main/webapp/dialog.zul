@@ -1,0 +1,74 @@
+<?page title="Person" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+  <window apply="org.test.zk.dialog.CDialogController" title="Person" border="normal" hflex="min">
+  
+    <vlayout width="343px">
+  
+     <grid hflex="min">
+       
+       <rows>
+       
+         <row>
+       
+           <label id="labelId" value="Id:" width="150px" />
+           <textbox id="textboxId" value="" width="130px" tabindex="1" />
+           
+         </row>
+
+         <row>
+       
+           <label id="labelFirstName" value="Nombre:" width="150px" />
+           <textbox id="textboxFirstName" value="" width="180px" tabindex="2" />
+           
+         </row>
+
+         <row>
+       
+           <label id="labelLastName" value="Apellido:" width="150px" />
+           <textbox id="textboxLastName" value="" width="180px" tabindex="3" />
+           
+         </row>
+
+         <row>
+       
+           <label id="labelGender" value="Genero:" width="150px" />
+           <selectbox id="selectboxGender" />
+           
+         </row>
+
+         <row>
+       
+           <label id="labelBirdDate" value="Fecha de nacimiento:" width="150px" />
+           <datebox id="dateboxBirdDate" width="150px"  tabindex="4"/> <!-- format no funciona en el .zul arroja un error 500 -->
+           
+         </row>
+
+         <row>
+       
+           <label id="labelComment" value="Comentario:" width="150px" />
+           <textbox id="textboxComment" width="200px" tabindex="4" rows="5" />
+           
+         </row>
+
+         <row>
+       
+           
+         </row>
+       
+       </rows>
+  
+     </grid> 
+  
+     <div id="divButtonContainer" >
+     
+       <button id="buttonCancel" label="Cancelar" style="float:right;margin-left:5px;" />
+       <button id="buttonAccept" label="Aceptar" style="float:right;margin-left:5px;" />
+     
+     </div>
+  
+    </vlayout>
+  
+  </window>
+  
+</zk>
