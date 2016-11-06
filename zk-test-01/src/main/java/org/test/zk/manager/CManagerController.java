@@ -1,8 +1,5 @@
 package org.test.zk.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
