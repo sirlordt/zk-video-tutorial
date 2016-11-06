@@ -1,7 +1,7 @@
 <?page title="Person" contentType="text/html;charset=UTF-8"?>
 <zk>
 
-  <window apply="org.test.zk.dialog.CDialogController" title="Person" border="normal" hflex="min">
+  <window id="windowPerson" xmlns:w="client" apply="org.test.zk.dialog.CDialogController" title="Person" border="normal" hflex="min">
   
     <vlayout width="343px">
   
@@ -12,7 +12,21 @@
          <row>
        
            <label id="labelId" value="Id:" width="150px" />
-           <textbox id="textboxId" value="" width="130px" tabindex="1" />
+           <textbox id="textboxId" value="" width="130px" tabindex="1">
+             
+              <attribute w:name="doKeyPress_">
+              
+                <![CDATA[
+                  function(evt)
+                  {
+                    if (!this._shallIgnore(evt, "0123456789"))
+                       this.$doKeyPress_(evt);
+                  }
+                ]]>
+              
+              </attribute>              
+           
+           </textbox>
            
          </row>
 
