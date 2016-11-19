@@ -85,9 +85,15 @@ public class CManagerController extends SelectorComposer<Component> {
             
             CPerson person01 = new CPerson( "1111", "Juan", "Rojas" );
             CPerson person02 = new CPerson( "2222", "Jose", "Gonzales" );
+            CPerson person03 = new CPerson( "3333", "Jose", "Rodriguez" );
+            CPerson person04 = new CPerson( "4444", "Tomás", "Moreno" );
+            CPerson person05 = new CPerson( "5555", "Loly", "Gómez" );
             
             dataModel.add( person01 );
             dataModel.add( person02 );
+            dataModel.add( person03 );
+            dataModel.add( person04 );
+            dataModel.add( person05 );
             
             //Activa la seleccion multiple de elementos util para operacion de borrado de multiples elementos a la vez
             dataModel.setMultiple( true );
@@ -125,7 +131,8 @@ public class CManagerController extends SelectorComposer<Component> {
 		
 	}
 
-	@Listen( "onClick=#buttonDelete" )
+	@SuppressWarnings( { "rawtypes", "unchecked" } )
+    @Listen( "onClick=#buttonDelete" )
 	public void onClickbuttonDelete( Event event ) {
 
         Set<CPerson> selectedItems = dataModel.getSelection();
@@ -134,15 +141,47 @@ public class CManagerController extends SelectorComposer<Component> {
 
 		    //Obtenemos el primero de la lista es una lista por que puedes tener seleccion multiple
 	        
-		    String strBuffer = "";
+		    String strBuffer = null;
 		    
 		    for ( CPerson person : selectedItems ) {
 		    
-		       strBuffer = strBuffer + ";" + person.getId() + " " + person.getFirstName() + " " + person.getLastName();  
+		        if ( strBuffer == null ) {
+		        
+		            strBuffer = person.getId() + " " + person.getFirstName() + " " + person.getLastName();
 		            
+		        }
+		        else {
+	             
+		            strBuffer = strBuffer + "\n" + person.getId() + " " + person.getFirstName() + " " + person.getLastName();
+	               
+		        }   
+		       
 		    }
 		    
-            Messagebox.show( strBuffer );
+		    Messagebox.show( "¿Seguro que desea eliminar los " + Integer.toString( selectedItems.size() ) + " registros?\n" + strBuffer, "Eliminar", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		        
+		        public void onEvent(Event evt) throws InterruptedException {
+		        
+		            if ( evt.getName().equals( "onOK" ) ) {
+
+                        //Eliminar los registros seleccionados
+		                while ( selectedItems.iterator().hasNext() ) {
+
+		                    CPerson person = selectedItems.iterator().next();
+		                    
+		                    //selectedItems.iterator().remove();
+		                    
+		                    dataModel.remove( person );
+		                    
+		                }    
+		                
+		            } 
+		            
+		        }
+		        
+		    });		    
+		    
+            //Messagebox.show( strBuffer );
 		     
 		   
 		}
