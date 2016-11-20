@@ -1,6 +1,9 @@
 package org.test.zk.dialog;
 
+import org.test.zk.dao.CPerson;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -74,6 +77,28 @@ public class CDialogController extends SelectorComposer<Component> {
             selectboxGender.setSelectedIndex( 0 );
             
             dataModel.addToSelection( "Femenino" );
+            
+            final Execution execution = Executions.getCurrent();
+
+            CPerson personToModify = (CPerson) execution.getArg().get( "personToModify" );
+
+            textboxId.setValue( personToModify.getId() );
+            textboxFirstName.setValue( personToModify.getFirstName() );
+            textboxLastName.setValue( personToModify.getLastName() );
+            
+            if ( personToModify.getGender() == 0 ) {
+            
+                dataModel.addToSelection( "Femenino" ); //Seleccionamos en el modelo el genero 
+                        
+            }
+            else {
+            	
+                dataModel.addToSelection( "Masculino" ); //Seleccionamos en el modelo el genero 
+            	
+            }
+            
+            dateboxBirdDate.setValue(  java.sql.Date.valueOf( personToModify.getBirthDate() ) );
+            textboxComment.setValue( personToModify.getComment() );
             
         }
         catch ( Exception e ) {

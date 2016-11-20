@@ -9,9 +9,12 @@
       
          <listhead sizable="true">
          
-           <listheader label="Id"/>
-           <listheader label="Nombres"/>
-           <listheader label="Apellidos"/>
+           <listheader label="Id" width="100px"/>
+           <listheader label="Nombres" width="100px"/>
+           <listheader label="Apellidos" width="100px"/>
+           <listheader label="Género" width="100px"/>
+           <listheader label="Fecha de nacimiento" width="150px"/>
+           <listheader label="Comentario" width="250px"/>
          
          </listhead>         
       
