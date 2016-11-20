@@ -97,7 +97,8 @@ public class CDialogController extends SelectorComposer<Component> {
             	
             }
             
-            dateboxBirdDate.setValue(  java.sql.Date.valueOf( personToModify.getBirthDate() ) );
+            dateboxBirdDate.setValue(  java.sql.Date.valueOf( personToModify.getBirthDate() ) ); //de LocalDate a Date
+            //LocalDate ld = new java.sql.Date(date.getTime()).toLocalDate(); //Viceversa de Date a LocalDate
             textboxComment.setValue( personToModify.getComment() );
             
         }
