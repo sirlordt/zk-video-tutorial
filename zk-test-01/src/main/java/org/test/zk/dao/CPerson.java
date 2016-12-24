@@ -26,6 +26,12 @@ public class CPerson implements Serializable {
         
     }
     
+    public CPerson() {
+        
+        
+        
+    }
+    
     public String getId() {
         
         return strId;
@@ -92,7 +98,7 @@ public class CPerson implements Serializable {
 		
 	}
 
-	public void setStrComment( String strComment ) {
+	public void setComment( String strComment ) {
 		
 		this.strComment = strComment;
 		
