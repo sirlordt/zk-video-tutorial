@@ -171,7 +171,7 @@ public class CDialogController extends SelectorComposer<Component> {
     	}
     	else {
     	    
-    	    personToAdd = new CPerson(); //Usamos el contructor sin paramtetros
+    	    personToAdd = new CPerson(); //Usamos el contructor sin parámetros
     	    
     	    personToAdd.setId( textboxId.getValue() ); //Usamos los métodos setter
     	    personToAdd.setFirstName( textboxFirstName.getValue() );

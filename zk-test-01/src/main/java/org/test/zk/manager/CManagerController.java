@@ -128,7 +128,6 @@ public class CManagerController extends SelectorComposer<Component> {
             
             listboxPersons.setModel( dataModel );      
             
-            
             listboxPersons.setItemRenderer( new rendererHelper() ); //Aqui lo asociamos al listbox
             
         }
@@ -149,7 +148,7 @@ public class CManagerController extends SelectorComposer<Component> {
 	    
 		Map<String,Object> params = new HashMap<String,Object>();
 		
-		params.put( "callerComponent", listboxPersons );
+		params.put( "callerComponent", buttonAdd );
 		//arg.put("someName", someValue);
 		Window win = (Window) Executions.createComponents( "/dialog.zul", null, params ); //attach to page as root if parent is null
 		
@@ -166,11 +165,12 @@ public class CManagerController extends SelectorComposer<Component> {
 		
 			CPerson person = selectedItems.iterator().next(); //El primero de la selección
 		
-			Map<String,Object> args = new HashMap<String,Object>();
+			Map<String,Object> params = new HashMap<String,Object>();
 			
-			args.put( "personToModify", person );
+			params.put( "personToModify", person );
+	        params.put( "callerComponent", buttonModify );
 			
-			Window win = (Window) Executions.createComponents( "/dialog.zul", null, args ); //attach to page as root if parent is null
+			Window win = (Window) Executions.createComponents( "/dialog.zul", null, params ); //attach to page as root if parent is null
 			
 			win.doModal();
 		    
@@ -246,12 +246,12 @@ public class CManagerController extends SelectorComposer<Component> {
 		
 	}
 	
-	@Listen( "onDialogFinished=#listboxPersons" )
+	@Listen( "onDialogFinished=#buttonAdd" ) //Solo funciona para cuando se agrega buttonAdd
 	public void onDialogFinishedbuttonAdd( Event event ) {
 	    
 	    //Este evento lo recibe del controlador del dialog.zul
 	    
-	    System.out.println( "Evento recibido" );
+	    System.out.println( "Evento recibido add" );
 	    
 	    //La clase event tiene un metodo .getData
 	    
@@ -259,15 +259,45 @@ public class CManagerController extends SelectorComposer<Component> {
 	        
 	        CPerson person = (CPerson) event.getData(); //Otra vez el typecast 
 	        
-	        System.out.println( person.getId() );
+	        /*System.out.println( person.getId() );
+            System.out.println( person.getFirstName() );
+            System.out.println( person.getLastName() );
+            System.out.println( person.getGender() );
+            System.out.println( person.getBirthDate() );
+            System.out.println( person.getComment() );*/
+	        
+	        dataModel.add( person ); //Cuando se agrega al modelo un elemento debería actualizarse el sola la lista
+	        
+	    }
+	    
+	}
+
+    @Listen( "onDialogFinished=#buttonModify" ) //Solo funciona para cuando se modifica buttonModify
+    public void onDialogFinishedbuttonModify( Event event ) {
+        
+        //Este evento lo recibe del controlador del dialog.zul
+        
+        System.out.println( "Evento recibido modify" );
+        
+        //La clase event tiene un metodo .getData
+        
+        if ( event.getData() != null ) {
+            
+            CPerson person = (CPerson) event.getData(); //Otra vez el typecast 
+            
+            System.out.println( person.getId() );
             System.out.println( person.getFirstName() );
             System.out.println( person.getLastName() );
             System.out.println( person.getGender() );
             System.out.println( person.getBirthDate() );
             System.out.println( person.getComment() );
-	        
-	    }
-	    
-	}
+            
+        }
+        
+        
+        listboxPersons.setModel( (ListModelList<?>) null ); //El null confunde a eclipse y el tipo a ser usado      
+        listboxPersons.setModel( dataModel );        
+        
+    }
 	
 }
