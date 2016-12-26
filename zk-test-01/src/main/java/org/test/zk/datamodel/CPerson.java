@@ -1,4 +1,4 @@
-package org.test.zk.dao;
+package org.test.zk.datamodel;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ public class CPerson implements Serializable {
     protected String strLastName;
     protected int intGender; //0 = Famale 1 = Male
 	protected LocalDate birthDate = null;
-    protected String strComment;
+	protected String strComment;
     
     //Constructor
     public CPerson( String strId, String strFirstName, String strLastName, int intGender, LocalDate birthDate, String strComment ) {

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.test.zk.dao.CPerson;
+import org.test.zk.datamodel.CPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -292,11 +292,13 @@ public class CManagerController extends SelectorComposer<Component> {
             System.out.println( person.getBirthDate() );
             System.out.println( person.getComment() );
             
+            dataModel.notifyChange( person ); //Decirle al modelo que este elemento cambio y que lo actualice en la lista Listbox
+            
         }
         
         
-        listboxPersons.setModel( (ListModelList<?>) null ); //El null confunde a eclipse y el tipo a ser usado      
-        listboxPersons.setModel( dataModel );        
+        //listboxPersons.setModel( (ListModelList<?>) null ); //El null confunde a eclipse y el tipo a ser usado      
+        //listboxPersons.setModel( dataModel );        
         
     }
 	

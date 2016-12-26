@@ -2,7 +2,7 @@ package org.test.zk;
 
 import java.time.LocalDate;
 
-import org.test.zk.dao.CPerson;
+import org.test.zk.datamodel.CPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;

@@ -1,6 +1,6 @@
 package org.test.zk.dialog;
 
-import org.test.zk.dao.CPerson;
+import org.test.zk.datamodel.CPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
