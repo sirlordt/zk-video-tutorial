@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.test.zk.database.CDatabaseConnection;
 import org.test.zk.datamodel.CPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -22,14 +23,14 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
 public class CManagerController extends SelectorComposer<Component> {
-
-	private static final long serialVersionUID = -1591648938821366036L;
-
-	protected ListModelList<CPerson> dataModel = new ListModelList<CPerson>(); 
-	
-	public class rendererHelper implements ListitemRenderer<CPerson> {
-	    
-	    /*
+    
+    private static final long serialVersionUID = -1591648938821366036L;
+    
+    protected ListModelList<CPerson> dataModel = new ListModelList<CPerson>(); 
+    
+    public class rendererHelper implements ListitemRenderer<CPerson> {
+        
+        /*
 	    public void render(Listitem listitem, Object data, int index) {
 	        Listcell cell = new Listcell();
 	        listitem.appendChild(cell);
@@ -41,8 +42,8 @@ public class CManagerController extends SelectorComposer<Component> {
 	            cell.appendChild(new Label("UNKNOW:"+data.toString()));
 	        }
 	    }
-*/
-
+         */
+        
         @Override
         public void render( Listitem listitem, CPerson person, int intIndex ) throws Exception {
             
@@ -59,25 +60,25 @@ public class CManagerController extends SelectorComposer<Component> {
                 cell.setLabel( person.getFirstName() );
                 
                 listitem.appendChild( cell );
-
+                
                 cell = new Listcell();
                 
                 cell.setLabel( person.getLastName() );
                 
                 listitem.appendChild( cell );
-
+                
                 cell = new Listcell();
                 
                 cell.setLabel( person.getGender() == 0 ? "Femenino" : "Masculino"  );
                 
                 listitem.appendChild( cell );
-
+                
                 cell = new Listcell();
                 
                 cell.setLabel( person.getBirthDate().toString() );
                 
                 listitem.appendChild( cell );
-
+                
                 cell = new Listcell();
                 
                 cell.setLabel( person.getComment() );
@@ -92,23 +93,28 @@ public class CManagerController extends SelectorComposer<Component> {
             }
             
         }
-	    
-	}	
-	
-	@Wire
-	Listbox listboxPersons;
-	
-	@Wire
-	Button buttonAdd;
-	
-	@Wire
-	Button buttonModify;
-	
+        
+    }	
+    
+    @Wire
+    Listbox listboxPersons;
+    
+    @Wire
+    Button buttonConnectionToDB;
+    
+    @Wire
+    Button buttonAdd;
+    
+    @Wire
+    Button buttonModify;
+    
+    protected CDatabaseConnection databaseConnection = null;
+    
     @Override
     public void doAfterCompose( Component comp ) {
         
         try {
-         
+            
             super.doAfterCompose( comp );
             
             CPerson person01 = new CPerson( "1111", "Juan", "Rojas", 1, LocalDate.parse( "1990-01-01" ), "Sin comentarios" );
@@ -137,141 +143,188 @@ public class CManagerController extends SelectorComposer<Component> {
             
         }
         
-     }    
-	
-	
-	
+    }    
+    
+    @Listen( "onClick=#buttonConnectionToDB" )
+    public void onClickbuttonConnectionToDB( Event event ) {
+        
+        if ( buttonConnectionToDB.getLabel().equalsIgnoreCase( "Connect" ) ) {
+            
+            databaseConnection = new CDatabaseConnection();
+            
+            if ( databaseConnection.makeConnectionToDatabase() ) {
+                
+                buttonConnectionToDB.setLabel( "Disconnect" );
+                
+                Messagebox.show( "Conexión exitosa" );
+                
+            }
+            else {
+                
+                Messagebox.show( "Conexión fallida" );
+                
+            }
+            
+        }
+        else {
+            
+            if ( databaseConnection != null ) {
+                
+                if ( databaseConnection.closeConnectionToDatabase() ) {
+                    
+                    buttonConnectionToDB.setLabel( "Connect" );
+                    
+                    Messagebox.show( "Conexión cerrada" );
+                    
+                }
+                else {
+                    
+                    Messagebox.show( "Falla al cerrar conexión" );
+                    
+                }
+                
+            }
+            else {
+                
+                Messagebox.show( "¡No estas conectado!" );
+                
+            }
+            
+        }
+        
+    }    
+    
     @Listen( "onClick=#buttonAdd" )
-	public void onClickbuttonAdd( Event event ) {
-		
-	    //Primero pasamos la referencia el buttonadd
-	    
-		Map<String,Object> params = new HashMap<String,Object>();
-		
-		params.put( "callerComponent", buttonAdd );
-		//arg.put("someName", someValue);
-		Window win = (Window) Executions.createComponents( "/dialog.zul", null, params ); //attach to page as root if parent is null
-		
-		win.doModal();
-		
-	}
-
-	@Listen( "onClick=#buttonModify" )
-	public void onClickbuttonModify( Event event ) {
-		
+    public void onClickbuttonAdd( Event event ) {
+        
+        //Primero pasamos la referencia el buttonadd
+        
+        Map<String,Object> params = new HashMap<String,Object>();
+        
+        params.put( "callerComponent", buttonAdd );
+        //arg.put("someName", someValue);
+        Window win = (Window) Executions.createComponents( "/dialog.zul", null, params ); //attach to page as root if parent is null
+        
+        win.doModal();
+        
+    }
+    
+    @Listen( "onClick=#buttonModify" )
+    public void onClickbuttonModify( Event event ) {
+        
         Set<CPerson> selectedItems = dataModel.getSelection();
-	    
-		if ( selectedItems != null && selectedItems.size() > 0 ) {
-		
-			CPerson person = selectedItems.iterator().next(); //El primero de la selección
-		
-			Map<String,Object> params = new HashMap<String,Object>();
-			
-			params.put( "personToModify", person );
-	        params.put( "callerComponent", buttonModify );
-			
-			Window win = (Window) Executions.createComponents( "/dialog.zul", null, params ); //attach to page as root if parent is null
-			
-			win.doModal();
-		    
-			
-		}
-		else {
-		    
-		    Messagebox.show( "No hay seleccion" );
-		    
-		}
-		
-	}
-
-	@SuppressWarnings( { "rawtypes", "unchecked" } )
+        
+        if ( selectedItems != null && selectedItems.size() > 0 ) {
+            
+            CPerson person = selectedItems.iterator().next(); //El primero de la selección
+            
+            Map<String,Object> params = new HashMap<String,Object>();
+            
+            params.put( "personToModify", person );
+            params.put( "callerComponent", buttonModify );
+            
+            Window win = (Window) Executions.createComponents( "/dialog.zul", null, params ); //attach to page as root if parent is null
+            
+            win.doModal();
+            
+            
+        }
+        else {
+            
+            Messagebox.show( "No hay seleccion" );
+            
+        }
+        
+    }
+    
+    @SuppressWarnings( { "rawtypes", "unchecked" } )
     @Listen( "onClick=#buttonDelete" )
-	public void onClickbuttonDelete( Event event ) {
-
+    public void onClickbuttonDelete( Event event ) {
+        
         Set<CPerson> selectedItems = dataModel.getSelection();
-	    
-		if ( selectedItems != null && selectedItems.size() > 0 ) {
-
-		    //Obtenemos el primero de la lista es una lista por que puedes tener seleccion multiple
-	        
-		    String strBuffer = null;
-		    
-		    for ( CPerson person : selectedItems ) {
-		    
-		        if ( strBuffer == null ) {
-		        
-		            strBuffer = person.getId() + " " + person.getFirstName() + " " + person.getLastName();
-		            
-		        }
-		        else {
-	             
-		            strBuffer = strBuffer + "\n" + person.getId() + " " + person.getFirstName() + " " + person.getLastName();
-	               
-		        }   
-		       
-		    }
-		    
-		    Messagebox.show( "¿Seguro que desea eliminar los " + Integer.toString( selectedItems.size() ) + " registros?\n" + strBuffer, "Eliminar", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
-		        
-		        public void onEvent(Event evt) throws InterruptedException {
-		        
-		            if ( evt.getName().equals( "onOK" ) ) {
-
+        
+        if ( selectedItems != null && selectedItems.size() > 0 ) {
+            
+            //Obtenemos el primero de la lista es una lista por que puedes tener seleccion multiple
+            
+            String strBuffer = null;
+            
+            for ( CPerson person : selectedItems ) {
+                
+                if ( strBuffer == null ) {
+                    
+                    strBuffer = person.getId() + " " + person.getFirstName() + " " + person.getLastName();
+                    
+                }
+                else {
+                    
+                    strBuffer = strBuffer + "\n" + person.getId() + " " + person.getFirstName() + " " + person.getLastName();
+                    
+                }   
+                
+            }
+            
+            Messagebox.show( "¿Seguro que desea eliminar los " + Integer.toString( selectedItems.size() ) + " registros?\n" + strBuffer, "Eliminar", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+                
+                public void onEvent(Event evt) throws InterruptedException {
+                    
+                    if ( evt.getName().equals( "onOK" ) ) {
+                        
                         //Eliminar los registros seleccionados
-		                while ( selectedItems.iterator().hasNext() ) {
-
-		                    CPerson person = selectedItems.iterator().next();
-		                    
-		                    //selectedItems.iterator().remove();
-		                    
-		                    dataModel.remove( person );
-		                    
-		                }    
-		                
-		            } 
-		            
-		        }
-		        
-		    });		    
-		    
+                        while ( selectedItems.iterator().hasNext() ) {
+                            
+                            CPerson person = selectedItems.iterator().next();
+                            
+                            //selectedItems.iterator().remove();
+                            
+                            dataModel.remove( person );
+                            
+                        }    
+                        
+                    } 
+                    
+                }
+                
+            });		    
+            
             //Messagebox.show( strBuffer );
-		     
-		   
-		}
-		else {
-		    
-		    Messagebox.show( "No hay seleccion" );
-		    
-		}
-		
-	}
-	
-	@Listen( "onDialogFinished=#buttonAdd" ) //Solo funciona para cuando se agrega buttonAdd
-	public void onDialogFinishedbuttonAdd( Event event ) {
-	    
-	    //Este evento lo recibe del controlador del dialog.zul
-	    
-	    System.out.println( "Evento recibido add" );
-	    
-	    //La clase event tiene un metodo .getData
-	    
-	    if ( event.getData() != null ) {
-	        
-	        CPerson person = (CPerson) event.getData(); //Otra vez el typecast 
-	        
-	        /*System.out.println( person.getId() );
+            
+            
+        }
+        else {
+            
+            Messagebox.show( "No hay seleccion" );
+            
+        }
+        
+    }
+    
+    @Listen( "onDialogFinished=#buttonAdd" ) //Solo funciona para cuando se agrega buttonAdd
+    public void onDialogFinishedbuttonAdd( Event event ) {
+        
+        //Este evento lo recibe del controlador del dialog.zul
+        
+        System.out.println( "Evento recibido add" );
+        
+        //La clase event tiene un metodo .getData
+        
+        if ( event.getData() != null ) {
+            
+            CPerson person = (CPerson) event.getData(); //Otra vez el typecast 
+            
+            /*System.out.println( person.getId() );
             System.out.println( person.getFirstName() );
             System.out.println( person.getLastName() );
             System.out.println( person.getGender() );
             System.out.println( person.getBirthDate() );
             System.out.println( person.getComment() );*/
-	        
-	        dataModel.add( person ); //Cuando se agrega al modelo un elemento debería actualizarse el sola la lista
-	        
-	    }
-	    
-	}
-
+            
+            dataModel.add( person ); //Cuando se agrega al modelo un elemento debería actualizarse el sola la lista
+            
+        }
+        
+    }
+    
     @Listen( "onDialogFinished=#buttonModify" ) //Solo funciona para cuando se modifica buttonModify
     public void onDialogFinishedbuttonModify( Event event ) {
         
@@ -301,5 +354,5 @@ public class CManagerController extends SelectorComposer<Component> {
         //listboxPersons.setModel( dataModel );        
         
     }
-	
+    
 }
