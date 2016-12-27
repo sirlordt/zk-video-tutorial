@@ -9,6 +9,8 @@ import org.test.zk.database.CDatabaseConnection;
 import org.test.zk.datamodel.CPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -25,6 +27,8 @@ import org.zkoss.zul.Window;
 public class CManagerController extends SelectorComposer<Component> {
     
     private static final long serialVersionUID = -1591648938821366036L;
+    
+    public static final String _DATABASE_CONNECTION_KEY = "databaseConnection";
     
     protected ListModelList<CPerson> dataModel = new ListModelList<CPerson>(); 
     
@@ -136,6 +140,19 @@ public class CManagerController extends SelectorComposer<Component> {
             
             listboxPersons.setItemRenderer( new rendererHelper() ); //Aqui lo asociamos al listbox
             
+            //Varificamos si el usuario esa conectado o no 
+            
+            Session currentSession = Sessions.getCurrent();
+
+            if ( currentSession.getAttribute( _DATABASE_CONNECTION_KEY ) instanceof CDatabaseConnection ) {
+
+                //REcurperamos de la session la anterior conexión
+                databaseConnection = (CDatabaseConnection) currentSession.getAttribute( _DATABASE_CONNECTION_KEY ); //Aquí vamos de nuevo con el typecast tambien llamado conversión de tipos forzado
+                
+                buttonConnectionToDB.setLabel( "Disconnect" ); //Indicamos en el boton que estamos conectados y listos para desconectar
+                
+            }
+            
         }
         catch ( Exception e ) {
             
@@ -147,12 +164,18 @@ public class CManagerController extends SelectorComposer<Component> {
     
     @Listen( "onClick=#buttonConnectionToDB" )
     public void onClickbuttonConnectionToDB( Event event ) {
+
+        Session currentSession = Sessions.getCurrent();
         
-        if ( buttonConnectionToDB.getLabel().equalsIgnoreCase( "Connect" ) ) {
+        //Usamos la conexión como bandera ya que esta persistida por la sesion
+        if ( databaseConnection == null ) { // buttonConnectionToDB.getLabel().equalsIgnoreCase( "Connect" ) ) {
             
             databaseConnection = new CDatabaseConnection();
             
             if ( databaseConnection.makeConnectionToDatabase() ) {
+                
+                //Salvamos la conexión a la sesión actual del usuario, cada usuario/ pestaña tiene su sesión
+                currentSession.setAttribute( _DATABASE_CONNECTION_KEY, databaseConnection ); //La sesion no es más que un arreglo asociativo
                 
                 buttonConnectionToDB.setLabel( "Disconnect" );
                 
@@ -172,9 +195,15 @@ public class CManagerController extends SelectorComposer<Component> {
                 
                 if ( databaseConnection.closeConnectionToDatabase() ) {
                     
+                    databaseConnection = null;
+                    
                     buttonConnectionToDB.setLabel( "Connect" );
                     
                     Messagebox.show( "Conexión cerrada" );
+                    
+                    //Borramos la variable de sesion
+                    //currentSession.setAttribute( _DATABASE_CONNECTION_KEY, null ); //La sesion no es más que un arreglo asociativo
+                    currentSession.removeAttribute( _DATABASE_CONNECTION_KEY ); //Listo mejor que poner a nulo la entrada
                     
                 }
                 else {
