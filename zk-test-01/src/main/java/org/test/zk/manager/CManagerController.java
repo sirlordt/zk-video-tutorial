@@ -1,10 +1,10 @@
 package org.test.zk.manager;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.test.zk.dao.TBLPersonDAO;
 import org.test.zk.database.CDatabaseConnection;
 import org.test.zk.datamodel.TBLPerson;
 import org.zkoss.zk.ui.Component;
@@ -121,6 +121,7 @@ public class CManagerController extends SelectorComposer<Component> {
             
             super.doAfterCompose( comp );
             
+            /*
             TBLPerson person01 = new TBLPerson( "1111", "Juan", "Rojas", 1, LocalDate.parse( "1990-01-01" ), "Sin comentarios" );
             TBLPerson person02 = new TBLPerson( "2222", "Jose", "Gonzales", 1, LocalDate.parse( "1960-11-01" ), "Sin comentarios" );
             TBLPerson person03 = new TBLPerson( "3333", "Jose", "Rodriguez", 1, LocalDate.parse( "1970-01-21" ), "Sin comentarios" );
@@ -132,6 +133,7 @@ public class CManagerController extends SelectorComposer<Component> {
             dataModel.add( person03 );
             dataModel.add( person04 );
             dataModel.add( person05 );
+            */
             
             //Activa la seleccion multiple de elementos util para operacion de borrado de multiples elementos a la vez
             dataModel.setMultiple( true );
@@ -349,6 +351,10 @@ public class CManagerController extends SelectorComposer<Component> {
             System.out.println( person.getComment() );*/
             
             dataModel.add( person ); //Cuando se agrega al modelo un elemento debería actualizarse el sola la lista
+            
+            //Temporalmente lo probamos aquí
+            
+            TBLPersonDAO.instertData( databaseConnection, person );            
             
         }
         
