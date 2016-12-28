@@ -3,7 +3,7 @@ package org.test.zk.datamodel;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class CPerson implements Serializable {
+public class TBLPerson extends CAuditableDataModel implements Serializable  {
     
     private static final long serialVersionUID = -500698741423949696L;
 
@@ -15,7 +15,7 @@ public class CPerson implements Serializable {
 	protected String strComment;
     
     //Constructor
-    public CPerson( String strId, String strFirstName, String strLastName, int intGender, LocalDate birthDate, String strComment ) {
+    public TBLPerson( String strId, String strFirstName, String strLastName, int intGender, LocalDate birthDate, String strComment ) {
         
         this.strId = strId;
         this.strFirstName = strFirstName;
@@ -26,7 +26,7 @@ public class CPerson implements Serializable {
         
     }
     
-    public CPerson() {
+    public TBLPerson() {
         
         
         

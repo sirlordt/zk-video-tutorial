@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.test.zk.database.CDatabaseConnection;
-import org.test.zk.datamodel.CPerson;
+import org.test.zk.datamodel.TBLPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
@@ -30,9 +30,9 @@ public class CManagerController extends SelectorComposer<Component> {
     
     public static final String _DATABASE_CONNECTION_KEY = "databaseConnection";
     
-    protected ListModelList<CPerson> dataModel = new ListModelList<CPerson>(); 
+    protected ListModelList<TBLPerson> dataModel = new ListModelList<TBLPerson>(); 
     
-    public class rendererHelper implements ListitemRenderer<CPerson> {
+    public class rendererHelper implements ListitemRenderer<TBLPerson> {
         
         /*
 	    public void render(Listitem listitem, Object data, int index) {
@@ -49,7 +49,7 @@ public class CManagerController extends SelectorComposer<Component> {
          */
         
         @Override
-        public void render( Listitem listitem, CPerson person, int intIndex ) throws Exception {
+        public void render( Listitem listitem, TBLPerson person, int intIndex ) throws Exception {
             
             try {
                 
@@ -121,11 +121,11 @@ public class CManagerController extends SelectorComposer<Component> {
             
             super.doAfterCompose( comp );
             
-            CPerson person01 = new CPerson( "1111", "Juan", "Rojas", 1, LocalDate.parse( "1990-01-01" ), "Sin comentarios" );
-            CPerson person02 = new CPerson( "2222", "Jose", "Gonzales", 1, LocalDate.parse( "1960-11-01" ), "Sin comentarios" );
-            CPerson person03 = new CPerson( "3333", "Jose", "Rodriguez", 1, LocalDate.parse( "1970-01-21" ), "Sin comentarios" );
-            CPerson person04 = new CPerson( "4444", "Tomás", "Moreno", 1, LocalDate.parse( "1982-07-13" ), "Sin comentarios" );
-            CPerson person05 = new CPerson( "5555", "Loly", "Gómez", 0, LocalDate.parse( "1980-01-16" ), "Sin comentarios" );
+            TBLPerson person01 = new TBLPerson( "1111", "Juan", "Rojas", 1, LocalDate.parse( "1990-01-01" ), "Sin comentarios" );
+            TBLPerson person02 = new TBLPerson( "2222", "Jose", "Gonzales", 1, LocalDate.parse( "1960-11-01" ), "Sin comentarios" );
+            TBLPerson person03 = new TBLPerson( "3333", "Jose", "Rodriguez", 1, LocalDate.parse( "1970-01-21" ), "Sin comentarios" );
+            TBLPerson person04 = new TBLPerson( "4444", "Tomás", "Moreno", 1, LocalDate.parse( "1982-07-13" ), "Sin comentarios" );
+            TBLPerson person05 = new TBLPerson( "5555", "Loly", "Gómez", 0, LocalDate.parse( "1980-01-16" ), "Sin comentarios" );
             
             dataModel.add( person01 );
             dataModel.add( person02 );
@@ -241,11 +241,11 @@ public class CManagerController extends SelectorComposer<Component> {
     @Listen( "onClick=#buttonModify" )
     public void onClickbuttonModify( Event event ) {
         
-        Set<CPerson> selectedItems = dataModel.getSelection();
+        Set<TBLPerson> selectedItems = dataModel.getSelection();
         
         if ( selectedItems != null && selectedItems.size() > 0 ) {
             
-            CPerson person = selectedItems.iterator().next(); //El primero de la selección
+            TBLPerson person = selectedItems.iterator().next(); //El primero de la selección
             
             Map<String,Object> params = new HashMap<String,Object>();
             
@@ -270,7 +270,7 @@ public class CManagerController extends SelectorComposer<Component> {
     @Listen( "onClick=#buttonDelete" )
     public void onClickbuttonDelete( Event event ) {
         
-        Set<CPerson> selectedItems = dataModel.getSelection();
+        Set<TBLPerson> selectedItems = dataModel.getSelection();
         
         if ( selectedItems != null && selectedItems.size() > 0 ) {
             
@@ -278,7 +278,7 @@ public class CManagerController extends SelectorComposer<Component> {
             
             String strBuffer = null;
             
-            for ( CPerson person : selectedItems ) {
+            for ( TBLPerson person : selectedItems ) {
                 
                 if ( strBuffer == null ) {
                     
@@ -302,7 +302,7 @@ public class CManagerController extends SelectorComposer<Component> {
                         //Eliminar los registros seleccionados
                         while ( selectedItems.iterator().hasNext() ) {
                             
-                            CPerson person = selectedItems.iterator().next();
+                            TBLPerson person = selectedItems.iterator().next();
                             
                             //selectedItems.iterator().remove();
                             
@@ -339,7 +339,7 @@ public class CManagerController extends SelectorComposer<Component> {
         
         if ( event.getData() != null ) {
             
-            CPerson person = (CPerson) event.getData(); //Otra vez el typecast 
+            TBLPerson person = (TBLPerson) event.getData(); //Otra vez el typecast 
             
             /*System.out.println( person.getId() );
             System.out.println( person.getFirstName() );
@@ -365,7 +365,7 @@ public class CManagerController extends SelectorComposer<Component> {
         
         if ( event.getData() != null ) {
             
-            CPerson person = (CPerson) event.getData(); //Otra vez el typecast 
+            TBLPerson person = (TBLPerson) event.getData(); //Otra vez el typecast 
             
             System.out.println( person.getId() );
             System.out.println( person.getFirstName() );
