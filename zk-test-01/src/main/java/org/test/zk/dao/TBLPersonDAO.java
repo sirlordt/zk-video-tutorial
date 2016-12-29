@@ -32,7 +32,7 @@ public class TBLPersonDAO {
                     result.setFirstName( resultSet.getString( "FirstName" ) );
                     result.setLastName( resultSet.getString( "LastName" ) );
                     result.setGender( resultSet.getInt( "Gender" ) );
-                    result.setBirthDate( resultSet.getDate( "BirdDate" ).toLocalDate() );
+                    result.setBirthDate( resultSet.getDate( "BirthDate" ).toLocalDate() );
                     result.setComment( resultSet.getString( "Comment" ) );
                     
                     //Los siguientes métodos setCreatedBy bienen de la clase CAuditableDataModel
@@ -79,12 +79,31 @@ public class TBLPersonDAO {
                 //Esta es la parte fastidiosa de no usar un ORM
                 statement.executeUpdate( strSQL );
                 
+                databaseConnection.getDBConnection().commit(); //Commit la transacción
+                
+                statement.close();
+                
                 bResult = true;
                 
             }    
             
         }
         catch ( Exception ex ) {
+            
+            if ( databaseConnection != null && databaseConnection.getDBConnection() != null ) {
+
+                try {
+                   
+                    databaseConnection.getDBConnection().rollback(); //En caso de error rollback todas las operaciones anteriores.
+                     
+                }
+                catch ( Exception e ) {
+                    
+                    e.printStackTrace(); //Podemos tenes problemas en el rollback nos exige un try catch
+                    
+                } 
+                
+            }    
             
             ex.printStackTrace();
             
@@ -111,12 +130,29 @@ public class TBLPersonDAO {
                 
                 databaseConnection.getDBConnection().commit(); //Commit la transacción
                 
+                statement.close(); //Cerrar y liberar recursos
+                
                 bResult = true;
                 
             }    
             
         }
         catch ( Exception ex ) {
+
+            if ( databaseConnection != null && databaseConnection.getDBConnection() != null ) {
+
+                try {
+                   
+                    databaseConnection.getDBConnection().rollback(); //En caso de error rollback todas las operaciones anteriores.
+                     
+                }
+                catch ( Exception e ) {
+                    
+                    e.printStackTrace(); //Podemos tenes problemas en el rollback nos exige un try catch
+                    
+                } 
+                
+            }    
             
             ex.printStackTrace();
             
@@ -130,6 +166,47 @@ public class TBLPersonDAO {
         
         boolean bResult = false; 
         
+        try {
+            
+            if ( databaseConnection != null && databaseConnection.getDBConnection() != null ) {
+                
+                Statement statement = databaseConnection.getDBConnection().createStatement();
+
+                //Esto es un dolor de cabeza sin ORM como hibernate o mybatis
+                final String strSQL = "Update tblPerson Set Id='" + tblPerson.getId() + "', FirstName = '" + tblPerson.getFirstName() + "',LastName = '" + tblPerson.getLastName() + "', Gender = " + tblPerson.getGender() + ",BirthDate = '" + tblPerson.getBirthDate().toString() + "', Comment = '" + tblPerson.getComment() + "',UpdatedBy = 'Test01', UpdatedAtDate = '" + LocalDate.now().toString() + "',UpdatedAtTime = '" + LocalTime.now().toString() + "' Where Id = '" + tblPerson.getId() + "'";
+                
+                //Esta es la parte fastidiosa de no usar un ORM
+                statement.executeUpdate( strSQL );
+                
+                databaseConnection.getDBConnection().commit(); //Commit la transacción
+                
+                statement.close(); //Cerrar y liberar recursos
+                
+                bResult = true;
+                
+            }    
+            
+        }
+        catch ( Exception ex ) {
+
+            if ( databaseConnection != null && databaseConnection.getDBConnection() != null ) {
+
+                try {
+                   
+                    databaseConnection.getDBConnection().rollback(); //En caso de error rollback todas las operaciones anteriores.
+                     
+                }
+                catch ( Exception e ) {
+                    
+                    e.printStackTrace(); //Podemos tenes problemas en el rollback nos exige un try catch
+                    
+                } 
+                
+            }    
+            
+            ex.printStackTrace();
+            
+        }
         
         return bResult;
         
@@ -155,7 +232,7 @@ public class TBLPersonDAO {
                     tblPerson.setFirstName( resultSet.getString( "FirstName" ) );
                     tblPerson.setLastName( resultSet.getString( "LastName" ) );
                     tblPerson.setGender( resultSet.getInt( "Gender" ) );
-                    tblPerson.setBirthDate( resultSet.getDate( "BirdDate" ).toLocalDate() );
+                    tblPerson.setBirthDate( resultSet.getDate( "BirthDate" ).toLocalDate() );
                     tblPerson.setComment( resultSet.getString( "Comment" ) );
                     
                     //Los siguientes métodos setCreatedBy bienen de la clase CAuditableDataModel

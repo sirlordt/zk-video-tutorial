@@ -1,6 +1,7 @@
 package org.test.zk.manager;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -30,7 +32,7 @@ public class CManagerController extends SelectorComposer<Component> {
     
     public static final String _DATABASE_CONNECTION_KEY = "databaseConnection";
     
-    protected ListModelList<TBLPerson> dataModel = new ListModelList<TBLPerson>(); 
+    protected ListModelList<TBLPerson> dataModel =  null; //new ListModelList<TBLPerson>(); 
     
     public class rendererHelper implements ListitemRenderer<TBLPerson> {
         
@@ -105,6 +107,9 @@ public class CManagerController extends SelectorComposer<Component> {
     
     @Wire
     Button buttonConnectionToDB;
+
+    @Wire
+    Button buttonRefresh;
     
     @Wire
     Button buttonAdd;
@@ -135,12 +140,15 @@ public class CManagerController extends SelectorComposer<Component> {
             dataModel.add( person05 );
             */
             
+            /*
             //Activa la seleccion multiple de elementos util para operacion de borrado de multiples elementos a la vez
             dataModel.setMultiple( true );
             
             listboxPersons.setModel( dataModel );      
             
             listboxPersons.setItemRenderer( new rendererHelper() ); //Aqui lo asociamos al listbox
+
+            */
             
             //Varificamos si el usuario esa conectado o no 
             
@@ -223,6 +231,41 @@ public class CManagerController extends SelectorComposer<Component> {
             
         }
         
+        //Forzamos que refresque la lista
+        Events.echoEvent( new Event( "onClick", buttonRefresh ) );  //Lanzamos el evento click de zk 
+        
+    }    
+    
+    @Listen( "onClick=#buttonRefresh" )
+    public void onClickbuttonRefresh( Event event ) {
+
+        //Aquí vamos a cargar el modelo con la data de la bd
+        //Este evento se ejecuta no tan solo con el click del mouse del usuario, si no cuando recibimos onDialogFinished
+        
+        listboxPersons.setModel( (ListModelList<?>) null ); //Limpiamos el anterior modelo    
+        
+        Session currentSession = Sessions.getCurrent();
+        
+        if ( currentSession.getAttribute( _DATABASE_CONNECTION_KEY ) instanceof CDatabaseConnection ) {
+        
+            //Recuperamos la conexión a bd de la sesion.
+            databaseConnection = (CDatabaseConnection) currentSession.getAttribute( _DATABASE_CONNECTION_KEY ); //Aquí vamos de nuevo con el typecast tambien llamado conversión de tipos forzado
+           
+            List<TBLPerson> listData = TBLPersonDAO.searchData( databaseConnection );
+
+            //Recreamos el modelo nuevamente
+            
+            dataModel = new ListModelList<TBLPerson>( listData );  //Creamos el modelo a partir de la lista que no retorna la bd
+
+            //Activa la seleccion multiple de elementos util para operacion de borrado de multiples elementos a la vez
+            dataModel.setMultiple( true );
+            
+            listboxPersons.setModel( dataModel );      
+            
+            listboxPersons.setItemRenderer( new rendererHelper() ); //Aqui lo asociamos al listbox
+            
+        }
+        
     }    
     
     @Listen( "onClick=#buttonAdd" )
@@ -232,7 +275,7 @@ public class CManagerController extends SelectorComposer<Component> {
         
         Map<String,Object> params = new HashMap<String,Object>();
         
-        params.put( "callerComponent", buttonAdd );
+        params.put( "callerComponent", listboxPersons ); //buttonAdd );
         //arg.put("someName", someValue);
         Window win = (Window) Executions.createComponents( "/dialog.zul", null, params ); //attach to page as root if parent is null
         
@@ -251,8 +294,9 @@ public class CManagerController extends SelectorComposer<Component> {
             
             Map<String,Object> params = new HashMap<String,Object>();
             
-            params.put( "personToModify", person );
-            params.put( "callerComponent", buttonModify );
+            //params.put( "personToModify", person );
+            params.put( "IdPerson", person.getId() );
+            params.put( "callerComponent", listboxPersons ); //buttonModify );
             
             Window win = (Window) Executions.createComponents( "/dialog.zul", null, params ); //attach to page as root if parent is null
             
@@ -329,7 +373,20 @@ public class CManagerController extends SelectorComposer<Component> {
         }
         
     }
+
+    @Listen( "onDialogFinished=#listboxPersons" ) //Notifica que se agrego o modifico una entidad y que debe refrescar la lista el modelo
+    public void onDialogFinishedlistboxPersons( Event event ) {
+
+        //En zk es posible lanzar eventos no tan solo definidos por nosotros mismo si no tambien los estandares de zk como el click
+     
+        //Forzamos refrescar la lista 
+             
+        Events.echoEvent( new Event( "onClick", buttonRefresh ) );  //Lanzamos el evento click de zk
+        
+        
+    }
     
+    /*
     @Listen( "onDialogFinished=#buttonAdd" ) //Solo funciona para cuando se agrega buttonAdd
     public void onDialogFinishedbuttonAdd( Event event ) {
         
@@ -343,18 +400,18 @@ public class CManagerController extends SelectorComposer<Component> {
             
             TBLPerson person = (TBLPerson) event.getData(); //Otra vez el typecast 
             
-            /*System.out.println( person.getId() );
+            /***System.out.println( person.getId() );
             System.out.println( person.getFirstName() );
             System.out.println( person.getLastName() );
             System.out.println( person.getGender() );
             System.out.println( person.getBirthDate() );
-            System.out.println( person.getComment() );*/
+            System.out.println( person.getComment() );*** /
             
             dataModel.add( person ); //Cuando se agrega al modelo un elemento debería actualizarse el sola la lista
             
             //Temporalmente lo probamos aquí
             
-            TBLPersonDAO.instertData( databaseConnection, person );            
+            //TBLPersonDAO.instertData( databaseConnection, person );            
             
         }
         
@@ -389,5 +446,6 @@ public class CManagerController extends SelectorComposer<Component> {
         //listboxPersons.setModel( dataModel );        
         
     }
+    */
     
 }

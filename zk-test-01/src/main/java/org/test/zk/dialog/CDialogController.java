@@ -1,9 +1,13 @@
 package org.test.zk.dialog;
 
+import org.test.zk.dao.TBLPersonDAO;
+import org.test.zk.database.CDatabaseConnection;
 import org.test.zk.datamodel.TBLPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.SelectorComposer;
@@ -19,6 +23,8 @@ import org.zkoss.zul.Window;
 
 public class CDialogController extends SelectorComposer<Component> {
 
+    public static final String _DATABASE_CONNECTION_KEY = "databaseConnection";
+    
     private static final long serialVersionUID = -8977563222707532143L;
     
     protected ListModelList<String> dataModel = new ListModelList<String>();
@@ -69,6 +75,8 @@ public class CDialogController extends SelectorComposer<Component> {
     @Wire
     Textbox textboxComment;
     
+    protected CDatabaseConnection databaseConnection = null;
+    
     @Override
     public void doAfterCompose( Component comp ) {
         
@@ -88,7 +96,25 @@ public class CDialogController extends SelectorComposer<Component> {
             
             final Execution execution = Executions.getCurrent();
             
-            personToModify = (TBLPerson) execution.getArg().get( "personToModify" ); //Recibimos la persona a modificar y la guardamos en la variable de clase
+            Session currentSession = Sessions.getCurrent();
+            
+            if ( currentSession.getAttribute( _DATABASE_CONNECTION_KEY ) instanceof CDatabaseConnection ) {
+
+                //Recuperamos la conexión a bd de la sesion.
+                databaseConnection = (CDatabaseConnection) currentSession.getAttribute( _DATABASE_CONNECTION_KEY ); //Aquí vamos de nuevo con el typecast tambien llamado conversión de tipos forzado
+
+                //PersonToModify debe venir de la bd y no de la lista pasada como argumento
+                if ( execution.getArg().get( "IdPerson" ) instanceof String ) { 
+                    
+                    //Cargamos la data de la bd
+                    personToModify = TBLPersonDAO.loadData( databaseConnection, (String) execution.getArg().get( "IdPerson" ) );
+                    
+                }
+                
+            }    
+            
+            
+            //personToModify = (TBLPerson) execution.getArg().get( "personToModify" ); //Recibimos la persona a modificar y la guardamos en la variable de clase
 
             //Cuando se esta creando una nueva persona no hay personToModify es igual a nulo debemos verificar esto
 
@@ -165,6 +191,8 @@ public class CDialogController extends SelectorComposer<Component> {
             
             personToModify.setComment( textboxComment.getValue() );
             
+            TBLPersonDAO.updateData( databaseConnection, personToModify ); //Guardamos en la BD Actualizamos
+            
             //Lanzamos el evento retornamos la persona a modificar
             Events.echoEvent( new Event( "onDialogFinished", callerComponent, personToModify ) ); //Suma importancia que los nombres de los eventos coincidan
     	
@@ -180,6 +208,7 @@ public class CDialogController extends SelectorComposer<Component> {
             personToAdd.setBirthDate( new java.sql.Date( dateboxBirdDate.getValue().getTime() ).toLocalDate() );
             personToAdd.setComment( textboxComment.getValue() );
             
+            TBLPersonDAO.instertData( databaseConnection, personToAdd ); //Guardamos en la BD Insertamos
             
             Events.echoEvent( new Event( "onDialogFinished", callerComponent, personToAdd ) ); //Suma importancia que los nombres de los eventos coincidan
             
