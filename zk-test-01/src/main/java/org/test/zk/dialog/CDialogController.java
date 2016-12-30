@@ -1,5 +1,6 @@
 package org.test.zk.dialog;
 
+import org.test.zk.contants.SystemConstants;
 import org.test.zk.dao.TBLPersonDAO;
 import org.test.zk.database.CDatabaseConnection;
 import org.test.zk.datamodel.TBLPerson;
@@ -23,10 +24,8 @@ import org.zkoss.zul.Window;
 
 public class CDialogController extends SelectorComposer<Component> {
 
-    public static final String _DATABASE_CONNECTION_KEY = "databaseConnection";
-    
-    private static final long serialVersionUID = -8977563222707532143L;
-    
+    private static final long serialVersionUID = 4576166418245585107L;
+
     protected ListModelList<String> dataModel = new ListModelList<String>();
     
     protected Component callerComponent = null; //Variable de clase de tipo protegida
@@ -34,7 +33,6 @@ public class CDialogController extends SelectorComposer<Component> {
     protected TBLPerson personToModify = null; //Guarda la persona a ser modificada
     
     protected TBLPerson personToAdd = null; //Guarda la persona a ser agregada
-    
     
     @Wire
     Window windowPerson;
@@ -98,10 +96,10 @@ public class CDialogController extends SelectorComposer<Component> {
             
             Session currentSession = Sessions.getCurrent();
             
-            if ( currentSession.getAttribute( _DATABASE_CONNECTION_KEY ) instanceof CDatabaseConnection ) {
+            if ( currentSession.getAttribute( SystemConstants._DATABASE_CONNECTION_KEY ) instanceof CDatabaseConnection ) {
 
                 //Recuperamos la conexión a bd de la sesion.
-                databaseConnection = (CDatabaseConnection) currentSession.getAttribute( _DATABASE_CONNECTION_KEY ); //Aquí vamos de nuevo con el typecast tambien llamado conversión de tipos forzado
+                databaseConnection = (CDatabaseConnection) currentSession.getAttribute( SystemConstants._DATABASE_CONNECTION_KEY ); //Aquí vamos de nuevo con el typecast tambien llamado conversión de tipos forzado
 
                 //PersonToModify debe venir de la bd y no de la lista pasada como argumento
                 if ( execution.getArg().get( "IdPerson" ) instanceof String ) { 

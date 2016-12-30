@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Database config file!</comment>
+<entry key="driver">com.mysql.jdbc.Driver</entry>
+<entry key="prefix">jdbc:mysql://</entry>
+<entry key="host">localhost</entry>
+<entry key="port">3306</entry>
+<entry key="user">root</entry>
+<entry key="password">rafael</entry>
+<entry key="database">TestDB</entry>
+</properties>
