@@ -1,5 +1,6 @@
 package org.test.zk.manager;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Set;
 import org.test.zk.contants.SystemConstants;
 import org.test.zk.dao.TBLPersonDAO;
 import org.test.zk.database.CDatabaseConnection;
+import org.test.zk.database.CDatabaseConnectionConfig;
 import org.test.zk.datamodel.TBLPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -181,19 +183,33 @@ public class CManagerController extends SelectorComposer<Component> {
             
             databaseConnection = new CDatabaseConnection();
             
-            if ( databaseConnection.makeConnectionToDatabase() ) {
+            CDatabaseConnectionConfig databaseConnectionConfig = new CDatabaseConnectionConfig();
+            
+            //En esta línea obtenemos la ruta completa del archivo de configuración incluido el /config/
+            String strRunningPath = Sessions.getCurrent().getWebApp().getRealPath( SystemConstants._WEB_INF_Dir ) + File.separator + SystemConstants._CONFIG_dir + File.separator;
+            
+            if ( databaseConnectionConfig.loadConfig( strRunningPath + SystemConstants._DATABASE_CONFIG_file ) ) {
                 
-                //Salvamos la conexión a la sesión actual del usuario, cada usuario/ pestaña tiene su sesión
-                currentSession.setAttribute( SystemConstants._DATABASE_CONNECTION_KEY, databaseConnection ); //La sesion no es más que un arreglo asociativo
-                
-                buttonConnectionToDB.setLabel( "Disconnect" );
-                
-                Messagebox.show( "Conexión exitosa" );
+                if ( databaseConnection.makeConnectionToDatabase( databaseConnectionConfig ) ) {
+                    
+                    //Salvamos la conexión a la sesión actual del usuario, cada usuario/ pestaña tiene su sesión
+                    currentSession.setAttribute( SystemConstants._DATABASE_CONNECTION_KEY, databaseConnection ); //La sesion no es más que un arreglo asociativo
+                    
+                    buttonConnectionToDB.setLabel( "Disconnect" );
+                    
+                    Messagebox.show( "Conexión exitosa" );
+                    
+                }
+                else {
+                    
+                    Messagebox.show( "Conexión fallida" );
+                    
+                }
                 
             }
             else {
                 
-                Messagebox.show( "Conexión fallida" );
+                Messagebox.show( "Error al leer archivo de configuración" );
                 
             }
             
