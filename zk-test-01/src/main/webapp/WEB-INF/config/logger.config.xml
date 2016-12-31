@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <comment>Logger config file!</comment>
+  <entry key="deploy_site">pc-develop-house</entry>
+  <entry key="deploy_node">node01</entry>
+  <entry key="deploy_app_name">WebApp-Odin</entry>
+  <entry key="deploy_app_version">0.0.1</entry>
+  <entry key="deploy_context">develop</entry>
+  <entry key="instance_id">WebApp:MainLogger</entry>
+  <entry key="log_to_screen">false</entry>
+  <entry key="class_name_method_name">*.*</entry>
+  <entry key="exact_match">false</entry>
+  <entry key="level">ALL</entry>
+  <entry key="log_missing_translations">true</entry>
+  <entry key="log_ip"></entry>
+  <entry key="log_port">-1</entry>
+  <entry key="http_log_url"></entry>
+  <entry key="http_log_user"></entry>
+  <entry key="http_log_lassword"></entry>
+  <entry key="proxy_ip"></entry>
+  <entry key="proxy_port">-1</entry>
+  <entry key="proxy_user"></entry>
+  <entry key="proxy_password"></entry>
+  <entry key="disable_files_log">false</entry>
+  <entry key="log_aggregation">true</entry>
+  <entry key="max_entries_aggregation">100</entry>
+</properties>

@@ -40,4 +40,8 @@ public class SystemConstants {
     public static final String _Login_Date_Time_Session_Key = "loginDateTime";
     public static final String _Log_Path_Session_Key = "logPath";
     
+    public static final String _Webapp_Logger_App_Attribute_Key = "webAppLogger";
+    public static final String _Webapp_Logger_Name = "webapplogger";
+    public static final String _Webapp_Logger_File_Log = "webapplogger.log";
+    
 }
