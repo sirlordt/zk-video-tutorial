@@ -34,6 +34,7 @@ public class CDialogController extends SelectorComposer<Component> {
     
     protected TBLPerson personToAdd = null; //Guarda la persona a ser agregada
     
+    
     @Wire
     Window windowPerson;
     
@@ -96,10 +97,10 @@ public class CDialogController extends SelectorComposer<Component> {
             
             Session currentSession = Sessions.getCurrent();
             
-            if ( currentSession.getAttribute( SystemConstants._DATABASE_CONNECTION_KEY ) instanceof CDatabaseConnection ) {
+            if ( currentSession.getAttribute( SystemConstants._DB_Connection_Session_Key ) instanceof CDatabaseConnection ) {
 
                 //Recuperamos la conexión a bd de la sesion.
-                databaseConnection = (CDatabaseConnection) currentSession.getAttribute( SystemConstants._DATABASE_CONNECTION_KEY ); //Aquí vamos de nuevo con el typecast tambien llamado conversión de tipos forzado
+                databaseConnection = (CDatabaseConnection) currentSession.getAttribute( SystemConstants._DB_Connection_Session_Key ); //Aquí vamos de nuevo con el typecast tambien llamado conversión de tipos forzado
 
                 //PersonToModify debe venir de la bd y no de la lista pasada como argumento
                 if ( execution.getArg().get( "IdPerson" ) instanceof String ) { 
