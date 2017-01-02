@@ -5,8 +5,11 @@ import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.Properties;
 
+import commonlibs.commonclasses.CLanguage;
+import commonlibs.extendedlogger.CExtendedLogger;
+
 public class CDatabaseConnectionConfig implements Serializable {
- 
+
     private static final long serialVersionUID = 3434139873022621518L;
 
     protected String strDriver = null;
@@ -34,135 +37,148 @@ public class CDatabaseConnectionConfig implements Serializable {
         
         
     }
-
-    public boolean loadConfig( String strConfigPath ) {
+    
+    public boolean loadConfig( String strConfigPath, CExtendedLogger localLogger, CLanguage localLanguage ) {
         
         boolean bResult = false;
         
         try {
-            
-            File configFilePath =  new File( strConfigPath );
+
+            File configFilePath = new File( strConfigPath );
             
             if ( configFilePath.exists() ) {
-                
+
                 Properties configsData = new Properties();
                 
                 FileInputStream inputStream = new FileInputStream( configFilePath );
                 
-                configsData.loadFromXML( inputStream ); //Aquí leemos del archivo
+                configsData.loadFromXML( inputStream );
                 
-                this.strDriver = configsData.getProperty( "driver" );
-                this.strPrefix = configsData.getProperty( "prefix" );
-                this.strHost = configsData.getProperty( "host" );
-                this.strPort = configsData.getProperty( "port" );
-                this.strDatabase = configsData.getProperty( "database" );
-                this.strUser = configsData.getProperty( "user" );
-                this.strPassword = configsData.getProperty( "password" );
+                localLogger.logMessage( "1" , CLanguage.translateIf( localLanguage, "Readed config values from file [%s]" ,  strConfigPath ) );
+
+                this.strDriver = (String) configsData.get( "driver" );
+                localLogger.logMessage( "1" , CLanguage.translateIf( localLanguage, "Loaded value for [%s] [%s]", "driver",  this.strDriver ) );
+                this.strPrefix = (String) configsData.get( "prefix" );
+                localLogger.logMessage( "1" , CLanguage.translateIf( localLanguage, "Loaded value for [%s] [%s]", "prefix",  this.strPrefix ) );
+                this.strHost = (String) configsData.get( "host" );
+                localLogger.logMessage( "1" , CLanguage.translateIf( localLanguage, "Loaded value for [%s] [%s]", "host",  this.strHost ) );
+                this.strPort = (String) configsData.get( "port" );
+                localLogger.logMessage( "1" , CLanguage.translateIf( localLanguage, "Loaded value for [%s] [%s]", "port", this.strPort ) );
+                this.strDatabase = (String) configsData.get( "database" );
+                localLogger.logMessage( "1" , CLanguage.translateIf( localLanguage, "Loaded value for [%s] [%s]", "database",  this.strDatabase ) );
+                this.strUser = (String) configsData.get( "user" );
+                localLogger.logMessage( "1" , CLanguage.translateIf( localLanguage, "Loaded value for [%s] [%s]", "user",  this.strUser ) );
+                this.strPassword = (String) configsData.get( "password" );
+                localLogger.logMessage( "1" , CLanguage.translateIf( localLanguage, "Loaded value for [%s] [%s]", "password",  this.strPassword ) );
                 
-                inputStream.close(); //Cerramos el stream
+                inputStream.close();                
                 
                 bResult = true;
                 
             }
-            else {
+            else if ( localLogger != null ) {
                 
-                System.out.println( "Error the file not found" );
+                localLogger.logError( "-1001" , CLanguage.translateIf( localLanguage, "Config file in path [%s] not found" ,  strConfigPath ) );
                 
             }
             
         }
-        catch ( Exception ex ) {
+        catch ( Exception Ex ) {
             
-            ex.printStackTrace();
+            if ( localLogger != null ) {
+                
+                localLogger.logException( "-1021" , Ex.getMessage(), Ex );
+                
+            }
             
-        } 
+        }
         
         return bResult;
         
     }
-    
+
     public String getDriver() {
         
         return strDriver;
-
+        
     }
-    
+
     public void setDriver( String strDriver ) {
         
         this.strDriver = strDriver;
-
+        
     }
-    
+
     public String getPrefix() {
         
         return strPrefix;
-
+        
     }
-    
+
     public void setPrefix( String strPrefix ) {
         
         this.strPrefix = strPrefix;
-
+        
     }
-    
+
     public String getHost() {
         
         return strHost;
-
+        
     }
-    
+
     public void setHost( String strHost ) {
         
         this.strHost = strHost;
-
+        
     }
-    
+
     public String getPort() {
         
         return strPort;
-
+        
     }
-    
+
     public void setPort( String strPort ) {
         
         this.strPort = strPort;
-
+        
     }
-    
+
     public String getDatabase() {
         
         return strDatabase;
-
+        
     }
-    
+
     public void setDatabase( String strDatabase ) {
         
         this.strDatabase = strDatabase;
-
+        
     }
-    
+
     public String getUser() {
         
         return strUser;
-    
+        
     }
-    
-    public void setUser( String strUser ) {
+
+    public void setUser(String strUser) {
         
         this.strUser = strUser;
-
+        
     }
-    
+
     public String getPassword() {
         
         return strPassword;
-
+        
     }
-    
-    public void setPassword( String strPassword ) {
+
+    public void setPassword(String strPassword) {
         
         this.strPassword = strPassword;
-    
+        
     }
     
 }
