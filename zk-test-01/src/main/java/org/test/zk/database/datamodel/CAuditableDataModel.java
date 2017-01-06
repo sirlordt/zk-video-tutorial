@@ -1,4 +1,4 @@
-package org.test.zk.datamodel;
+package org.test.zk.database.datamodel;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

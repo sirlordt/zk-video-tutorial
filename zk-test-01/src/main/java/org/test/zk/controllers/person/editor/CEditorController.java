@@ -1,9 +1,9 @@
-package org.test.zk.dialog;
+package org.test.zk.controllers.person.editor;
 
 import org.test.zk.contants.SystemConstants;
-import org.test.zk.dao.TBLPersonDAO;
 import org.test.zk.database.CDatabaseConnection;
-import org.test.zk.datamodel.TBLPerson;
+import org.test.zk.database.dao.PersonDAO;
+import org.test.zk.database.datamodel.TBLPerson;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -21,8 +21,12 @@ import org.zkoss.zul.Selectbox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
+import commonlibs.commonclasses.CLanguage;
+import commonlibs.commonclasses.ConstantsCommonClasses;
+import commonlibs.extendedlogger.CExtendedLogger;
 
-public class CDialogController extends SelectorComposer<Component> {
+
+public class CEditorController extends SelectorComposer<Component> {
 
     private static final long serialVersionUID = 4576166418245585107L;
 
@@ -76,12 +80,19 @@ public class CDialogController extends SelectorComposer<Component> {
     
     protected CDatabaseConnection databaseConnection = null;
     
+    protected CExtendedLogger controllerLogger = null;
+    
+    protected CLanguage controllerLanguage = null; //La usamos despues
+    
     @Override
     public void doAfterCompose( Component comp ) {
         
         try {
          
             super.doAfterCompose( comp );
+            
+            //Obtenemos el logger del objeto webApp y guardamos una referencia en la variable de clase controllerLogger
+            controllerLogger = (CExtendedLogger) Sessions.getCurrent().getWebApp().getAttribute( ConstantsCommonClasses._Webapp_Logger_App_Attribute_Key );
             
             dateboxBirdDate.setFormat( "dd/MM/yyyy" );
             
@@ -96,7 +107,7 @@ public class CDialogController extends SelectorComposer<Component> {
             final Execution execution = Executions.getCurrent();
             
             Session currentSession = Sessions.getCurrent();
-            
+             
             if ( currentSession.getAttribute( SystemConstants._DB_Connection_Session_Key ) instanceof CDatabaseConnection ) {
 
                 //Recuperamos la conexión a bd de la sesion.
@@ -106,7 +117,7 @@ public class CDialogController extends SelectorComposer<Component> {
                 if ( execution.getArg().get( "IdPerson" ) instanceof String ) { 
                     
                     //Cargamos la data de la bd
-                    personToModify = TBLPersonDAO.loadData( databaseConnection, (String) execution.getArg().get( "IdPerson" ) );
+                    personToModify = PersonDAO.loadData( databaseConnection, (String) execution.getArg().get( "IdPerson" ), controllerLogger, controllerLanguage );
                     
                 }
                 
@@ -190,7 +201,7 @@ public class CDialogController extends SelectorComposer<Component> {
             
             personToModify.setComment( textboxComment.getValue() );
             
-            TBLPersonDAO.updateData( databaseConnection, personToModify ); //Guardamos en la BD Actualizamos
+            PersonDAO.updateData( databaseConnection, personToModify, controllerLogger, controllerLanguage ); //Guardamos en la BD Actualizamos
             
             //Lanzamos el evento retornamos la persona a modificar
             Events.echoEvent( new Event( "onDialogFinished", callerComponent, personToModify ) ); //Suma importancia que los nombres de los eventos coincidan
@@ -207,7 +218,7 @@ public class CDialogController extends SelectorComposer<Component> {
             personToAdd.setBirthDate( new java.sql.Date( dateboxBirdDate.getValue().getTime() ).toLocalDate() );
             personToAdd.setComment( textboxComment.getValue() );
             
-            TBLPersonDAO.instertData( databaseConnection, personToAdd ); //Guardamos en la BD Insertamos
+            PersonDAO.instertData( databaseConnection, personToAdd, controllerLogger, controllerLanguage ); //Guardamos en la BD Insertamos
             
             Events.echoEvent( new Event( "onDialogFinished", callerComponent, personToAdd ) ); //Suma importancia que los nombres de los eventos coincidan
             

@@ -1,0 +1,33 @@
+.banner {
+  
+  background-color: #102d35;
+  color: white;
+  padding: 5px 10px;
+  
+}
+
+.banner-head {
+  
+  font-size: 2.4em;
+  
+}
+
+.footer {
+  
+  background-color: #102d35;
+  color: white;
+  padding-top: 5px;
+  
+}
+
+.footer a, .footer a:VISITED {
+  
+  color: white;
+  
+}
+
+.warn {
+  
+  color: red;
+  
+}

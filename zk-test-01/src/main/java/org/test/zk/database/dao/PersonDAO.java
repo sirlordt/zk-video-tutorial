@@ -1,4 +1,4 @@
-package org.test.zk.dao;
+package org.test.zk.database.dao;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.test.zk.database.CDatabaseConnection;
-import org.test.zk.datamodel.TBLPerson;
+import org.test.zk.database.datamodel.TBLPerson;
 
-public class TBLPersonDAO {
+import commonlibs.commonclasses.CLanguage;
+import commonlibs.extendedlogger.CExtendedLogger;
+
+public class PersonDAO {
     
-    public static TBLPerson loadData( final CDatabaseConnection databaseConnection, final String strId ) {
+    public static TBLPerson loadData( final CDatabaseConnection databaseConnection, final String strId, CExtendedLogger localLogger, CLanguage localLanguage  ) {
         
         TBLPerson result = null;
         
@@ -56,7 +59,8 @@ public class TBLPersonDAO {
         }
         catch ( Exception ex ) {
             
-            ex.printStackTrace();
+            if ( localLogger != null )   
+                localLogger.logException( "-1021", ex.getMessage(), ex );        
             
         }
             
@@ -64,7 +68,7 @@ public class TBLPersonDAO {
         
     }
     
-    public static boolean deleteData( final CDatabaseConnection databaseConnection, final String strId ) {
+    public static boolean deleteData( final CDatabaseConnection databaseConnection, final String strId, CExtendedLogger localLogger, CLanguage localLanguage  ) {
     
         boolean bResult = false; 
         
@@ -74,7 +78,7 @@ public class TBLPersonDAO {
                 
                 Statement statement = databaseConnection.getDBConnection().createStatement();
 
-                final String strSQL = "Delete TblPerson Where Id = '" + strId + "'";
+                final String strSQL = "Delete From tblPerson Where Id = '" + strId + "'";
                 
                 //Esta es la parte fastidiosa de no usar un ORM
                 statement.executeUpdate( strSQL );
@@ -99,13 +103,15 @@ public class TBLPersonDAO {
                 }
                 catch ( Exception e ) {
                     
-                    e.printStackTrace(); //Podemos tenes problemas en el rollback nos exige un try catch
+                    if ( localLogger != null )   
+                        localLogger.logException( "-1021", e.getMessage(), e );        
                     
                 } 
                 
             }    
             
-            ex.printStackTrace();
+            if ( localLogger != null )   
+                localLogger.logException( "-1022", ex.getMessage(), ex );        
             
         }
         
@@ -113,7 +119,7 @@ public class TBLPersonDAO {
         
     }
     
-    public static boolean instertData( final CDatabaseConnection databaseConnection, final TBLPerson tblPerson ) {
+    public static boolean instertData( final CDatabaseConnection databaseConnection, final TBLPerson tblPerson, CExtendedLogger localLogger, CLanguage localLanguage  ) {
         
         boolean bResult = false; 
         
@@ -148,13 +154,16 @@ public class TBLPersonDAO {
                 }
                 catch ( Exception e ) {
                     
-                    e.printStackTrace(); //Podemos tenes problemas en el rollback nos exige un try catch
+                    if ( localLogger != null )   
+                        localLogger.logException( "-1021", e.getMessage(), e );        
+                    //e.printStackTrace(); //Podemos tenes problemas en el rollback nos exige un try catch
                     
                 } 
                 
             }    
             
-            ex.printStackTrace();
+            if ( localLogger != null )   
+                localLogger.logException( "-1021", ex.getMessage(), ex );        
             
         }
         
@@ -162,7 +171,7 @@ public class TBLPersonDAO {
         
     }
     
-    public static boolean updateData( final CDatabaseConnection databaseConnection, final TBLPerson tblPerson ) {
+    public static boolean updateData( final CDatabaseConnection databaseConnection, final TBLPerson tblPerson, CExtendedLogger localLogger, CLanguage localLanguage  ) {
         
         boolean bResult = false; 
         
@@ -198,13 +207,16 @@ public class TBLPersonDAO {
                 }
                 catch ( Exception e ) {
                     
-                    e.printStackTrace(); //Podemos tenes problemas en el rollback nos exige un try catch
+                    if ( localLogger != null )   
+                        localLogger.logException( "-1021", e.getMessage(), e );        
+                    //e.printStackTrace(); //Podemos tenes problemas en el rollback nos exige un try catch
                     
                 } 
                 
             }    
             
-            ex.printStackTrace();
+            if ( localLogger != null )   
+                localLogger.logException( "-1021", ex.getMessage(), ex );        
             
         }
         
@@ -212,7 +224,7 @@ public class TBLPersonDAO {
         
     }
     
-    public static List<TBLPerson> searchData( final CDatabaseConnection databaseConnection ) {
+    public static List<TBLPerson> searchData( final CDatabaseConnection databaseConnection, CExtendedLogger localLogger, CLanguage localLanguage  ) {
         
         List<TBLPerson> result = new ArrayList<TBLPerson>(); 
         
@@ -258,7 +270,8 @@ public class TBLPersonDAO {
         }
         catch ( Exception ex ) {
             
-            ex.printStackTrace();
+            if ( localLogger != null )   
+                localLogger.logException( "-1021", ex.getMessage(), ex );        
             
         }
         

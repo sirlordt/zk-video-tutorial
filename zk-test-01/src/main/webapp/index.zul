@@ -1,8 +1,35 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?link rel="stylesheet" type="text/css" href="resources/styles/index.style.css"?>
 <zk>
-	<window apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm')@init('zk_test_01.zk_test_01.MyViewModel')"
-		validationMessages="@id('vmsgs')">
-		<hlayout>count: <label value="@load(vm.count)" /></hlayout>
-		<button label="add" onClick="@command('cmd')"/>
-	</window>
+
+  <borderlayout id="indexLayout" hflex="1" vflex="1">
+
+    <north id="northContent" height="100px" border="none" >
+        
+      <include id="includeNorthContent" src="/views/banner/banner.anonymous.zul"/>
+            
+    </north>
+    
+    <center id="mainContent" autoscroll="true" border="none">
+            
+      <hbox vflex="1" hflex="1" align="center" pack="center" spacing="20px">
+    
+        <vlayout>
+      
+          <include id="includeCenterContent" src="/views/login/login.zul"/>
+           
+        </vlayout>
+      
+      </hbox>
+      
+    </center>
+    
+    <south id="southContent" height="50px" border="none">
+        
+      <include id="includeSouthContent" src="/views/footer/footer.anonymous.zul"/>
+            
+    </south>
+        
+  </borderlayout>
+   
 </zk>

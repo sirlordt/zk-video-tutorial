@@ -1,7 +1,7 @@
 <?page title="Person manager" contentType="text/html;charset=UTF-8"?>
 <zk>
 
-  <window xmlns:w="client" position="center, center" apply="org.test.zk.manager.CManagerController" title="Person manager" border="normal" hflex="min">
+  <window xmlns:w="client" position="center, center" apply="org.test.zk.controllers.person.manager.CManagerController" title="Person manager" border="normal" hflex="min">
   
     <vlayout width="543px">
 

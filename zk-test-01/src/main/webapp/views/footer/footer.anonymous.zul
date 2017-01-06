@@ -1,0 +1,15 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+  
+  <div hflex="1" vflex="1" sclass="footer">
+  
+    <vbox hflex="1" vflex="1" align="center">
+  
+      <label value="Lutor Corp. Inc."/>
+      <a href="http://www.lutorcorp.com">http://www.lutorcorp.com</a>
+    
+    </vbox>
+  
+  </div>
+  
+</zk>
