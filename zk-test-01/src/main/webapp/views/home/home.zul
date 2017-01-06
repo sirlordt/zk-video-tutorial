@@ -1,0 +1,23 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?link rel="stylesheet" type="text/css" href="resources/styles/home.style.css"?>
+<zk>
+
+  <borderlayout id="homeLayout" hflex="1" vflex="1">
+
+    <north id="northContent" height="100px" border="none" >
+        
+            
+    </north>
+    
+    <center id="mainContent" autoscroll="true" border="none">
+            
+      
+    </center>
+    
+    <south id="southContent" height="50px" border="none">
+        
+    </south>
+        
+  </borderlayout>
+
+</zk>

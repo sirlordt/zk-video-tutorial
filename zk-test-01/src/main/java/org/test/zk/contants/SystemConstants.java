@@ -21,7 +21,7 @@ public class SystemConstants {
 
     public static final String _System_Dir = "system" + File.separator;
 
-    public static final String _WEB_INF_Dir = "WEB-INF" + File.separator;
+    public static final String _WEB_INF_Dir = "WEB-INF"; // + File.separator; No funciona bien en windows con el \ al final
 
     public static final String _Config_Dir = "config" + File.separator;
 
@@ -43,5 +43,7 @@ public class SystemConstants {
     public static final String _Webapp_Logger_App_Attribute_Key = "webAppLogger";
     public static final String _Webapp_Logger_Name = "webapplogger";
     public static final String _Webapp_Logger_File_Log = "webapplogger.log";
+    
+    
     
 }

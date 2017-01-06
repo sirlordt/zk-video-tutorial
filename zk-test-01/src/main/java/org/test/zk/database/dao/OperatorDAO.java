@@ -167,7 +167,7 @@ public class OperatorDAO {
             }    
             
             if ( localLogger != null )   
-                localLogger.logException( "-1021", ex.getMessage(), ex );        
+                localLogger.logException( "-1022", ex.getMessage(), ex );        
             
         }
         
@@ -223,7 +223,7 @@ public class OperatorDAO {
             }    
             
             if ( localLogger != null )   
-                localLogger.logException( "-1021", ex.getMessage(), ex );        
+                localLogger.logException( "-1022", ex.getMessage(), ex );        
             
         }
         
@@ -276,7 +276,7 @@ public class OperatorDAO {
             }    
             
             if ( localLogger != null )   
-                localLogger.logException( "-1021", ex.getMessage(), ex );        
+                localLogger.logException( "-1022", ex.getMessage(), ex );        
             
         }
         
@@ -292,7 +292,7 @@ public class OperatorDAO {
         
     }
  
-    public TBLOperator checkValid( final CDatabaseConnection databaseConnection, final String strName, final String strPassword, CExtendedLogger localLogger, CLanguage localLanguage  ) {
+    public static TBLOperator checkValid( final CDatabaseConnection databaseConnection, final String strName, final String strPassword, CExtendedLogger localLogger, CLanguage localLanguage  ) {
         
         TBLOperator result = null; 
 
@@ -314,8 +314,8 @@ public class OperatorDAO {
                     result.setComment( resultSet.getString( "Comment" ) );
                     
                     result.setDisabledBy( resultSet.getString( "DisabledBy" ) ); 
-                    result.setDisabledAtDate( resultSet.getDate( "DisabledAtDate" ).toLocalDate() ); 
-                    result.setDisabledAtTime( resultSet.getTime( "DisabledAtTime" ).toLocalTime() ); 
+                    result.setDisabledAtDate( resultSet.getDate( "DisabledAtDate" ) != null ? resultSet.getDate( "DisabledAtDate" ).toLocalDate() : null ); //Pueder ser null de la bd
+                    result.setDisabledAtTime( resultSet.getTime( "DisabledAtTime" ) != null ? resultSet.getTime( "DisabledAtTime" ).toLocalTime() : null ); //Pueder ser null de la bd
                     result.setLastLoginAtDate( resultSet.getDate( "LastLoginAtDate" ) != null ? resultSet.getDate( "LastLoginAtDate" ).toLocalDate() : null ); //Puede ser un null 
                     result.setLastLoginAtTime( resultSet.getTime( "LastLoginAtTime" ) != null ? resultSet.getTime( "LastLoginAtTime" ).toLocalTime() : null );  //Pueder ser null de la bd
                     

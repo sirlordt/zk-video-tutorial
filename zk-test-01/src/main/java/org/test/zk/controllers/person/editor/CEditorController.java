@@ -156,9 +156,10 @@ public class CEditorController extends SelectorComposer<Component> {
             callerComponent = (Component) execution.getArg().get( "callerComponent" ); //Usamos un  typecast a Component que es el padre de todos los elementos visuales de zk
             
         }
-        catch ( Exception e ) {
+        catch ( Exception ex ) {
             
-            e.printStackTrace();
+            if ( controllerLogger != null )   
+                controllerLogger.logException( "-1021", ex.getMessage(), ex );        
             
         }
         

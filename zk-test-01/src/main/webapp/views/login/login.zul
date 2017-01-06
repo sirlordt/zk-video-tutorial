@@ -2,7 +2,7 @@
 <?link rel="stylesheet" type="text/css" href="resources/styles/login.style.css"?>
 <zk>
 
-  <window id="windowLogin" apply="" title="Login with you email and password" border="normal" hflex="min"> 
+  <window id="windowLogin" apply="org.test.zk.controllers.login.CLoginController" title="Login with you email and password" border="normal" hflex="min"> 
 
     <vbox hflex="min" align="center">
         
@@ -22,7 +22,7 @@
               
             <label value="Username :"/>
                 
-            <textbox constraint="no empty" id="textboxUserName" width="200px" />
+            <textbox constraint="no empty" id="textboxOperator" width="200px" />
                 
           </row>
               
