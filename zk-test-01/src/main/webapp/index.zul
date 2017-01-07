@@ -1,5 +1,6 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <?link rel="stylesheet" type="text/css" href="resources/styles/index.style.css"?>
+<?init class="org.test.zk.security.CCheckAuthenticated"?>
 <zk>
 
   <borderlayout id="indexLayout" hflex="1" vflex="1">

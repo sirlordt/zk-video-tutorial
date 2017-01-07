@@ -1,4 +1,5 @@
 <?page title="Person" contentType="text/html;charset=UTF-8"?>
+<?init class="org.test.zk.security.CCheckAuthenticated"?>
 <zk>
 
   <window id="windowPerson" xmlns:w="client" apply="org.test.zk.controllers.person.editor.CEditorController" title="Person" border="normal" hflex="min">

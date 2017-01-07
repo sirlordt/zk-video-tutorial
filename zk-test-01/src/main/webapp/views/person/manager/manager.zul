@@ -1,4 +1,5 @@
 <?page title="Person manager" contentType="text/html;charset=UTF-8"?>
+<?init class="org.test.zk.security.CCheckAuthenticated"?>
 <zk>
 
   <window xmlns:w="client" position="center, center" apply="org.test.zk.controllers.person.manager.CManagerController" title="Person manager" border="normal" hflex="min">

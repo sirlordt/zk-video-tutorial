@@ -44,6 +44,14 @@ public class SystemConstants {
     public static final String _Webapp_Logger_Name = "webapplogger";
     public static final String _Webapp_Logger_File_Log = "webapplogger.log";
     
-    
+    public static final String _Check_Logged_Logger_Name = "checklogged";
+    public static final String _Check_Logged_File_Log = "checklogged.log";
+
+    public static final String _Log_Class_Method = "*.*";
+    public static final boolean _Log_Exact_Match = false;
+    public static final boolean _Log_Missing_Translations = false;
+    public static final String _Logger_Name_Missing_Translations = "MissingTranslations";
+    public static final String _Missing_Translations_File_Log = _Logger_Name_Missing_Translations + ".log";
+    public static final String _Log_Level = "ALL";
     
 }
