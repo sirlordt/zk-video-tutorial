@@ -16,6 +16,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
@@ -62,6 +63,25 @@ public class CLoginController extends SelectorComposer<Component> {
         }
     
     
+    }    
+    
+    @Listen( "onChanging=#textboxOperator; onChanging=#textboxPassword" )
+    public void onChangeTextbox( Event event ) {
+
+        //A si distinguimos cual componente en pantalla lanzo el evento a veces es útil para hacer una cosa u otra en el método
+        if ( event.getTarget().equals( textboxOperator ) ) {
+            
+            System.out.println( "Textbox operator" );
+            
+        }
+        else if ( event.getTarget().equals( textboxPassword ) ) {
+            
+            System.out.println( "Textbox password" );
+            
+        }
+        
+        labelMessage.setValue( "" ); //Cuando cambie el texto en cualquiera de los dos textbox quitamos el mensaje. de error.
+        
     }    
     
     @Listen( "onClick=#buttonLogin" )
@@ -148,5 +168,14 @@ public class CLoginController extends SelectorComposer<Component> {
         }
     
     }    
+    
+    @Listen("onTimer=#timerKeepAliveSession" )
+    public void onTimer( Event event ) {
         
+        //Este evento se ejecutara cada 120000 milisegundos 1 minuto aprox, esto no es un relog atomico a si que son tiempos aproximados
+        //Muestra un tablerito en la parte superior central de la pantalla
+        Clients.showNotification( "Automatic renewal of the session successful", "info",  null, "before_center", 2000, true );
+        
+    }
+    
 }
