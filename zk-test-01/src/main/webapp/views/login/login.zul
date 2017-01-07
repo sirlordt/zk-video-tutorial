@@ -1,8 +1,9 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <?link rel="stylesheet" type="text/css" href="resources/styles/login.style.css"?>
 <zk>
+  <!--   -->
 
-  <window id="windowLogin" apply="org.test.zk.controllers.login.CLoginController" title="Login with you email and password" border="normal" hflex="min"> 
+  <window id="windowLogin" apply="org.test.zk.controllers.login.CLoginController" title="Login with your operator name and password" border="normal" hflex="min"> 
 
     <vbox hflex="min" align="center">
         
@@ -20,7 +21,7 @@
               
           <row>
               
-            <label value="Username :"/>
+            <label value="Operator :"/>
                 
             <textbox constraint="no empty" id="textboxOperator" width="200px" />
                 

@@ -16,6 +16,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 
@@ -38,6 +39,9 @@ public class CLoginController extends SelectorComposer<Component> {
 
     @Wire
     Textbox textboxPassword;
+    
+    @Wire
+    Label labelMessage;
     
     @Override
     public void doAfterCompose( Component comp ) {
@@ -89,6 +93,10 @@ public class CLoginController extends SelectorComposer<Component> {
                             
                             //Si es válido guardamos la conexión creada en la sesioón y guardamos la identidad del operador en la sesión
                          
+                            //Damos un mensaje de bienvenida
+                            labelMessage.setSclass( "" ); //Por defecto esta etiqueta usar el color rojo en la fuente por el estilo warn
+                            labelMessage.setValue( "Welcome " + tblOperator.getName() + "!" ); //Ahora es color negro
+                            
                             Session currentSession = Sessions.getCurrent();
                             
                             //Salvamos la conexión a la sesión actual del usuario, cada usuario/ pestaña tiene su sesión
@@ -109,21 +117,23 @@ public class CLoginController extends SelectorComposer<Component> {
                         }
                         else {
                             
-                            Messagebox.show( "Invalid operator name and/or password" );
+                            labelMessage.setValue( "Invalid operator name and/or password!" );
+                            
+                            //Messagebox.show( "Invalid operator name and/or password" );
                             
                         }
                         
                     }
                     else {
                         
-                        Messagebox.show( "Connection failed" );
+                        Messagebox.show( "Database connection failed" );
                         
                     }
                     
                 }
                 else {
                     
-                    Messagebox.show( "Error to read the config file" );
+                    Messagebox.show( "Error to read the database config file" );
                     
                 }
                 
