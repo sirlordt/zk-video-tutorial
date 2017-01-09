@@ -10,6 +10,7 @@ public class TBLOperator extends CAuditableDataModel implements Serializable {
     
     protected String strId;
     protected String strName;
+    protected String strRole;
     protected String strPassword;
     protected String strComment;
     
@@ -41,6 +42,18 @@ public class TBLOperator extends CAuditableDataModel implements Serializable {
     public void setName( String strName ) {
         
         this.strName = strName;
+        
+    }
+    
+    public String getRole() {
+        
+        return strRole;
+        
+    }
+    
+    public void setRole( String strRole ) {
+        
+        this.strRole = strRole;
         
     }
     

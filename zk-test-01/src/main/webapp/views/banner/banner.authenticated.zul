@@ -1,0 +1,43 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?init class="org.test.zk.security.CCheckAuthenticated"?>
+<zk>
+
+  <div hflex="1" vflex="1" sclass="banner">
+
+    <hbox hflex="1" vflex="1" align="center">
+
+      <a href="http://www.lutorcorp.com/">
+
+        <image src="/resources/images/logo-400x322.png" width="90px"/>
+
+      </a>
+
+      <div width="400px">
+
+        <label id="lbHeader" value="" sclass="banner-head"/>
+
+      </div>
+
+      <vbox hflex="1" vflex="1" pack="end" align="end" if="${sessionScope.userCredential.name != null}">
+
+        <hbox hflex="1" vflex="1" pack="end" align="end">
+        
+          <label id="lbProfile" value="${sessionScope.userCredential.name} (${sessionScope.userCredential.comment})" style="cursor:hand;cursor:pointer"/>
+
+          <space bar="false" spacing="20px"/>
+
+          <button id="buttonChangePassword" label="Change password"/>
+
+          <button  id="buttonLogout" label="Logout"/>
+
+          <space bar="false" spacing="5px" />
+
+        </hbox>
+
+      </vbox>
+
+    </hbox>
+
+  </div>
+
+</zk>

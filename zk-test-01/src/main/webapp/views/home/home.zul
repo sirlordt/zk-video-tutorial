@@ -1,12 +1,13 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
-<?link rel="stylesheet" type="text/css" href="resources/styles/home.style.css"?>
+<?link rel="stylesheet" type="text/css" href="../../resources/styles/home.style.css"?>
 <?init class="org.test.zk.security.CCheckAuthenticated"?>
 <zk>
 
-  <borderlayout id="homeLayout" hflex="1" vflex="1">
+  <borderlayout id="homeLayout" apply="org.test.zk.controllers.home.CHomeController" hflex="1" vflex="1">
 
     <north id="northContent" height="100px" border="none" >
         
+      <include id="includeNorthContent" src="/views/banner/banner.authenticated.zul"/>
             
     </north>
     
@@ -16,6 +17,8 @@
     </center>
     
     <south id="southContent" height="50px" border="none">
+        
+      <include id="includeSouthContent" src="/views/footer/footer.authenticated.zul"/>
         
     </south>
         

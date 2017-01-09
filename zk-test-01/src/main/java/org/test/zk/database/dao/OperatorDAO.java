@@ -33,6 +33,7 @@ public class OperatorDAO {
                     
                     result.setId( resultSet.getString( "Id" ) );
                     result.setName( resultSet.getString( "Name" ) );
+                    result.setRole( resultSet.getString( "Role" ) );
                     result.setPassword( resultSet.getString( "Password" ) );
                     result.setComment( resultSet.getString( "Comment" ) );
                     
@@ -133,7 +134,7 @@ public class OperatorDAO {
                 
                 Statement statement = databaseConnection.getDBConnection().createStatement();
 
-                final String strSQL = "Insert Into tblOperator(Id,Name,Password,Comment,CreatedBy,CreatedAtDate,CreatedAtTime) Values('" + tblOperator.getId() + "','" + tblOperator.getName() + "','" + tblOperator.getPassword() + "','" + tblOperator.getComment() + "','test','" + LocalDate.now().toString() + "','" + LocalTime.now().toString() + "')";
+                final String strSQL = "Insert Into tblOperator(Id,Name,Role,Password,Comment,CreatedBy,CreatedAtDate,CreatedAtTime) Values('" + tblOperator.getId() + "','" + tblOperator.getName() + "', '" + tblOperator.getRole() + "','" + tblOperator.getPassword() + "','" + tblOperator.getComment() + "','test','" + LocalDate.now().toString() + "','" + LocalTime.now().toString() + "')";
                 
                 //Esta es la parte fastidiosa de no usar un ORM
                 statement.executeUpdate( strSQL );
@@ -189,7 +190,7 @@ public class OperatorDAO {
                 final String strDisabledAtTime = tblOperator.getDisabledBy() != null ? "'" + LocalTime.now().toString() + "'" : "null";
                 
                 //Esto es un dolor de cabeza sin ORM como hibernate o mybatis
-                final String strSQL = "Update tblOperator Set Id='" + tblOperator.getId() + "', Name = '" + tblOperator.getName() + "', Password = '" + tblOperator.getPassword() + "', Comment = '" + tblOperator.getComment() + "', UpdatedBy = 'Test01', UpdatedAtDate = '" + LocalDate.now().toString() + "',UpdatedAtTime = '" + LocalTime.now().toString() + "', DisabledBy = '" + tblOperator.getDisabledBy() + "', DisabledAtDate = " + strDisabledAtDate + ", DisabledAtTime = " +  strDisabledAtTime + " Where Id = '" + tblOperator.getId() + "'";
+                final String strSQL = "Update tblOperator Set Id='" + tblOperator.getId() + "', Name = '" + tblOperator.getName() + "' Role= '" + tblOperator.getRole() + "', Password = '" + tblOperator.getPassword() + "', Comment = '" + tblOperator.getComment() + "', UpdatedBy = 'Test01', UpdatedAtDate = '" + LocalDate.now().toString() + "',UpdatedAtTime = '" + LocalTime.now().toString() + "', DisabledBy = '" + tblOperator.getDisabledBy() + "', DisabledAtDate = " + strDisabledAtDate + ", DisabledAtTime = " +  strDisabledAtTime + " Where Id = '" + tblOperator.getId() + "'";
                 
                 //Esta es la parte fastidiosa de no usar un ORM
                 statement.executeUpdate( strSQL );
@@ -302,7 +303,7 @@ public class OperatorDAO {
                 
                 Statement statement = databaseConnection.getDBConnection().createStatement();
                 
-                ResultSet resultSet = statement.executeQuery( "Select * From tblOperator Where Name = '" + strName + "' And Password = '" + strPassword + "'" );
+                ResultSet resultSet = statement.executeQuery( "Select * From tblOperator Where Name = '" + strName + "' And Password = '" + strPassword + "' And DisabledBy Is Null And DisabledAtDate Is Null And DisabledAtTime Is Null" );
 
                 if ( resultSet.next() ) {
 
@@ -310,6 +311,7 @@ public class OperatorDAO {
                     
                     result.setId( resultSet.getString( "Id" ) );
                     result.setName( resultSet.getString( "Name" ) );
+                    result.setRole( resultSet.getString( "Role" ) );
                     result.setPassword( resultSet.getString( "Password" ) );
                     result.setComment( resultSet.getString( "Comment" ) );
                     
