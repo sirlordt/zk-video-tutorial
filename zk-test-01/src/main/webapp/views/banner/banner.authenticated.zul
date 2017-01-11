@@ -18,11 +18,11 @@
 
       </div>
 
-      <vbox hflex="1" vflex="1" pack="end" align="end" if="${sessionScope.userCredential.name != null}">
+      <vbox hflex="1" vflex="1" pack="end" align="end" if="${sessionScope.operatorCredential.name != null}">
 
         <hbox hflex="1" vflex="1" pack="end" align="end">
         
-          <label id="lbProfile" value="${sessionScope.userCredential.name} (${sessionScope.userCredential.comment})" style="cursor:hand;cursor:pointer"/>
+          <label id="lbProfile" value="${sessionScope.operatorCredential.name} (${sessionScope.operatorCredential.comment})" style="cursor:hand;cursor:pointer"/>
 
           <space bar="false" spacing="20px"/>
 

@@ -1,7 +1,9 @@
 package org.test.zk.zksubsystem;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import org.test.zk.contants.SystemConstants;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Session;
@@ -16,7 +18,6 @@ import org.zkoss.zk.ui.util.WebAppCleanup;
 import org.zkoss.zk.ui.util.WebAppInit;
 
 import commonlibs.commonclasses.CLanguage;
-import commonlibs.commonclasses.ConstantsCommonClasses;
 import commonlibs.extendedlogger.CExtendedConfigLogger;
 import commonlibs.extendedlogger.CExtendedLogger;
 
@@ -44,7 +45,7 @@ public class CZKSubsystemEvents implements DesktopInit, DesktopCleanup, SessionI
         try {
 
             //Obtenermos el logger
-            CExtendedLogger webAppLogger = CExtendedLogger.getLogger( ConstantsCommonClasses._Webapp_Logger_Name );
+            CExtendedLogger webAppLogger = CExtendedLogger.getLogger( SystemConstants._Webapp_Logger_Name );
 
             if ( webAppLogger != null ) {
                 
@@ -57,7 +58,7 @@ public class CZKSubsystemEvents implements DesktopInit, DesktopCleanup, SessionI
             }
 
             //Eliminamos el atributo del webapp
-            webApp.removeAttribute( ConstantsCommonClasses._Webapp_Logger_Name );
+            webApp.removeAttribute( SystemConstants._Webapp_Logger_Name );
             
         }
         catch ( Exception ex ) {
@@ -75,36 +76,36 @@ public class CZKSubsystemEvents implements DesktopInit, DesktopCleanup, SessionI
         
         try {
             
-            String strRunningPath = webApp.getRealPath( ConstantsCommonClasses._WEB_INF_Dir ) + "/";
+            String strRunningPath = webApp.getRealPath( SystemConstants._WEB_INF_Dir ) + "/";
 
             //Se encarga de leer el archivo de configuración logger.config.xml
             CExtendedConfigLogger configLogger = new CExtendedConfigLogger(); //Esta clase viene de mis librerías que importamos en la estructura del proyecto
 
             //Le decimos la ruta del archivo WEB-INF/config/logger.config.xml
-            String strConfigPath = strRunningPath + ConstantsCommonClasses._Config_Dir + ConstantsCommonClasses._Logger_Config_File_Name;
+            String strConfigPath = strRunningPath + SystemConstants._Config_Dir + SystemConstants._Logger_Config_File_Name;
 
             if ( configLogger.loadConfig( strConfigPath, null, null ) ) { //Cargamos la configuración
 
                 //Aquí creamos el logger como tal
-                CExtendedLogger webAppLogger = CExtendedLogger.getLogger( ConstantsCommonClasses._Webapp_Logger_Name );
+                CExtendedLogger webAppLogger = CExtendedLogger.getLogger( SystemConstants._Webapp_Logger_Name );
 
                 if ( webAppLogger.getSetupSet() == false ) { //Preguntamos si todavía no esta configurado
 
                     //Aquí le decimos donde va a crear los archivos de log WEB-INF/logs/system
-                    String strLogPath = strRunningPath + ConstantsCommonClasses._Logs_Dir + ConstantsCommonClasses._System_Dir;
+                    String strLogPath = strRunningPath + SystemConstants._Logs_Dir + SystemConstants._System_Dir;
 
                     //Configuramos el logger según los parámetros de el archivo logger.config.xml y la ruta para escribir los archivos de log
-                    webAppLogger.setupLogger( configLogger.getInstanceID(), configLogger.getLogToScreen(), strLogPath, ConstantsCommonClasses._Webapp_Logger_File_Log, configLogger.getClassNameMethodName(), configLogger.getExactMatch(), configLogger.getLevel(), configLogger.getLogIP(), configLogger.getLogPort(), configLogger.getHTTPLogURL(), configLogger.getHTTPLogUser(), configLogger.getHTTPLogPassword(), configLogger.getProxyIP(), configLogger.getProxyPort(), configLogger.getProxyUser(), configLogger.getProxyPassword() );
+                    webAppLogger.setupLogger( configLogger.getInstanceID(), configLogger.getLogToScreen(), strLogPath, SystemConstants._Webapp_Logger_File_Log, configLogger.getClassNameMethodName(), configLogger.getExactMatch(), configLogger.getLevel(), configLogger.getLogIP(), configLogger.getLogPort(), configLogger.getHTTPLogURL(), configLogger.getHTTPLogUser(), configLogger.getHTTPLogPassword(), configLogger.getProxyIP(), configLogger.getProxyPort(), configLogger.getProxyUser(), configLogger.getProxyPassword() );
 
                     //Guardamos el logger principal en un atributo del webapp
-                    webApp.setAttribute( ConstantsCommonClasses._Webapp_Logger_App_Attribute_Key, webAppLogger );
+                    webApp.setAttribute( SystemConstants._Webapp_Logger_App_Attribute_Key, webAppLogger );
 
                 }
 
                 //Aquí escribimos al log en un archivo en WEB-INF/logs/system/webapplogger.log
                 //Fijense en la clase CLanguage es otra de mis clases, pero no le presten mucha atención todavía
                 //Basta con decir que es una clase que permite escribir los mensajes del log en varios idiomas
-                webAppLogger.logMessage( "1" , CLanguage.translateIf( null, "Webapp logger loaded and configured [%s].", ConstantsCommonClasses._Webapp_Logger_Name ) );
+                webAppLogger.logMessage( "1" , CLanguage.translateIf( null, "Webapp logger loaded and configured [%s].", SystemConstants._Webapp_Logger_Name ) );
                 
             }
 
@@ -121,6 +122,23 @@ public class CZKSubsystemEvents implements DesktopInit, DesktopCleanup, SessionI
     public void cleanup( Session session ) throws Exception {
         
         System.out.println( "Session cleanup" );
+        
+        //Aquí debemos limpiar logger que estan en la sesión del operador que invocó el Session.getCurrent().invalidate();
+        
+        @SuppressWarnings( "unchecked" )
+        LinkedList<String> loggedSessionLoggers = (LinkedList<String>) session.getAttribute( SystemConstants._Logged_Session_Loggers );
+
+        for ( String strLoggername : loggedSessionLoggers ) {
+            
+            CExtendedLogger currentLogger = CExtendedLogger.getLogger( strLoggername );
+            
+            currentLogger.flushAndClose(); //Cerrar el logger
+            
+        }
+        
+        //Vaciar la lista
+        loggedSessionLoggers.clear();
+        
         
     }
 

@@ -22,7 +22,6 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import commonlibs.commonclasses.CLanguage;
-import commonlibs.commonclasses.ConstantsCommonClasses;
 import commonlibs.extendedlogger.CExtendedLogger;
 
 
@@ -92,7 +91,7 @@ public class CEditorController extends SelectorComposer<Component> {
             super.doAfterCompose( comp );
             
             //Obtenemos el logger del objeto webApp y guardamos una referencia en la variable de clase controllerLogger
-            controllerLogger = (CExtendedLogger) Sessions.getCurrent().getWebApp().getAttribute( ConstantsCommonClasses._Webapp_Logger_App_Attribute_Key );
+            controllerLogger = (CExtendedLogger) Sessions.getCurrent().getWebApp().getAttribute( SystemConstants._Webapp_Logger_App_Attribute_Key );
             
             dateboxBirdDate.setFormat( "dd/MM/yyyy" );
             

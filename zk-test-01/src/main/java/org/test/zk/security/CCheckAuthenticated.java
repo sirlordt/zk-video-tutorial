@@ -3,6 +3,7 @@ package org.test.zk.security;
 import java.io.File;
 import java.util.Map;
 
+import org.test.zk.contants.SystemConstants;
 import org.test.zk.database.datamodel.TBLOperator;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
@@ -11,7 +12,6 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Initiator;
 
 import commonlibs.commonclasses.CLanguage;
-import commonlibs.commonclasses.ConstantsCommonClasses;
 import commonlibs.extendedlogger.CExtendedLogger;
 
 
@@ -26,27 +26,27 @@ public class CCheckAuthenticated implements Initiator {
     public static void detectAuthenticatedAndRedirect( Page page, Map<String, Object> args ) {
         
         //Ok aqui creamos otro logger distinto al global esto con la finalidad de no sobrecargar el archivo con demasiadas entradas
-        CExtendedLogger extendedLogger = CExtendedLogger.getLogger( ConstantsCommonClasses._Check_Logged_Logger_Name );
+        CExtendedLogger extendedLogger = CExtendedLogger.getLogger( SystemConstants._Check_Logged_Logger_Name );
 
-        String strRunningPath = Sessions.getCurrent().getWebApp().getRealPath( ConstantsCommonClasses._WEB_INF_Dir ) + File.separator;
+        String strRunningPath = Sessions.getCurrent().getWebApp().getRealPath( SystemConstants._WEB_INF_Dir ) + File.separator;
         
         if ( extendedLogger != null && extendedLogger.getSetupSet() == false ) {
             
             //Establecemos el logpath
-            String strLogPath = strRunningPath + ConstantsCommonClasses._Logs_Dir + ConstantsCommonClasses._Security_Dir;
+            String strLogPath = strRunningPath + SystemConstants._Logs_Dir + SystemConstants._Security_Dir;
 
-            extendedLogger.setupLogger( ConstantsCommonClasses._Check_Logged_Logger_Name, false, strLogPath, ConstantsCommonClasses._Check_Logged_File_Log, ConstantsCommonClasses._Log_Class_Method, ConstantsCommonClasses._Log_Exact_Match, ConstantsCommonClasses._Log_Level, "", -1, "", "", "", "", -1, "", "" );
+            extendedLogger.setupLogger( SystemConstants._Check_Logged_Logger_Name, false, strLogPath, SystemConstants._Check_Logged_File_Log, SystemConstants._Log_Class_Method, SystemConstants._Log_Exact_Match, SystemConstants._Log_Level, "", -1, "", "", "", "", -1, "", "" );
             
         }
         
         //Aquí por primera vez inicializamos un CLanguage que es para tener múltiples languajes en los archivos de bitacora (Logs) deben estar dentro del path WEB-INF/langs/security/checklogged.init.lang  pero si no existe no es problema se usa ingles para todo
-        CLanguage languaje = CLanguage.getLanguage( extendedLogger, strRunningPath + ConstantsCommonClasses._Langs_Dir + ConstantsCommonClasses._Security_Dir + ConstantsCommonClasses._Check_Logged_Logger_Name + "." + ConstantsCommonClasses._Lang_Ext ); 
+        CLanguage languaje = CLanguage.getLanguage( extendedLogger, strRunningPath + SystemConstants._Langs_Dir + SystemConstants._Security_Dir + SystemConstants._Check_Logged_Logger_Name + "." + SystemConstants._Lang_Ext ); 
         
         Session currentSession = Sessions.getCurrent();
         
         //¿recuerdan que salvamos las credenciales del operador cuando este hace login correctamente?
         //Aqui tratamos de recuperarlo, si es null es que no hay un login válido todavía
-        TBLOperator tblOperator = (TBLOperator) currentSession.getAttribute( ConstantsCommonClasses._User_Credential_Session_Key );
+        TBLOperator tblOperator = (TBLOperator) currentSession.getAttribute( SystemConstants._Operator_Credential_Session_Key );
         
         //Aqui extraemos el request path que se coloca en el navegador
         String strRequestPath = Executions.getCurrent().getDesktop().getRequestPath();
@@ -54,7 +54,7 @@ public class CCheckAuthenticated implements Initiator {
         if ( tblOperator != null ) {
 
             //Para ser usado en el arhivo de log 
-            String strLoginDateTime = (String) currentSession.getAttribute( ConstantsCommonClasses._Login_Date_Time_Session_Key );
+            String strLoginDateTime = (String) currentSession.getAttribute( SystemConstants._Login_Date_Time_Session_Key );
             
             if ( strLoginDateTime == null )
                 strLoginDateTime = "";
