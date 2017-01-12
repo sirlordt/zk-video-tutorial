@@ -55,9 +55,15 @@ public class SystemConstants {
     public static final String _Missing_Translations_File_Log = _Logger_Name_Missing_Translations + ".log";
     public static final String _Log_Level = "ALL";
     
-    public static final String _Home_Controller_Logger_Name = "homecontroller";
-    public static final String _Home_Controller_File_Log = "homecontroller.log";
+    public static final String _Home_Controller_Logger_Name = "home_controller";
+    public static final String _Home_Controller_File_Log = "home_controller.log";
 
     public static final String _Logged_Session_Loggers = "loggedSessionLoggers";
+
+    public static final String _Person_Manager_Controller_Logger_Name = "person_manager_controller";
+    public static final String _Person_Manager_Controller_File_Log = "person_manager_controller.log";
+
+    public static final String _Person_Editor_Controller_Logger_Name = "person_editor_controller";
+    public static final String _Person_Editor_Controller_File_Log = "person_editor_controller.log";
     
 }

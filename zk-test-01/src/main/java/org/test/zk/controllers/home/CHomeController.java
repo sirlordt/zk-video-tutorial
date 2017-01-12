@@ -1,7 +1,9 @@
 package org.test.zk.controllers.home;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.test.zk.contants.SystemConstants;
 import org.test.zk.database.datamodel.TBLOperator;
@@ -14,6 +16,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Window;
 
 import commonlibs.commonclasses.CLanguage;
 import commonlibs.commonclasses.ConstantsCommonClasses;
@@ -26,9 +29,9 @@ public class CHomeController extends SelectorComposer<Component> {
 
     private static final long serialVersionUID = 1040032932048818844L;
 
-    protected CExtendedLogger controllerLogger;
+    protected CExtendedLogger controllerLogger = null;
     
-    protected CLanguage controllerLanguage;
+    protected CLanguage controllerLanguage = null;
     
     public void initcontrollerLoggerAndcontrollerLanguage( String strRunningPath, Session currentSession ) {
         
@@ -49,8 +52,11 @@ public class CHomeController extends SelectorComposer<Component> {
         if ( strLoginDateTime == null ) //En caso de ser null no ha fecha y hora de inicio de sesión colocarle una por defecto
             strLoginDateTime = Utilities.getDateInFormat( ConstantsCommonClasses._Global_Date_Time_Format_File_System_24, null );
 
+        final String strLoggerName = SystemConstants._Home_Controller_Logger_Name;
+        final String strLoggerFileName = SystemConstants._Home_Controller_File_Log;
+        
         //Aqui creamos el logger para el operador que inicio sesión login en el sistem
-        controllerLogger = CExtendedLogger.getLogger( SystemConstants._Home_Controller_Logger_Name + " " + strOperator + " " + strLoginDateTime );
+        controllerLogger = CExtendedLogger.getLogger( strLoggerName + " " + strOperator + " " + strLoginDateTime );
 
         //strRunningPath = Sessions.getCurrent().getWebApp().getRealPath( SystemConstanst._WEB_INF_Dir ) + File.separator;
 
@@ -65,12 +71,12 @@ public class CHomeController extends SelectorComposer<Component> {
 
             //Si hay una configucación leida de session o del archivo la aplicamos
             if ( extendedConfigLogger != null )
-                controllerLogger.setupLogger( strOperator + " " + strLoginDateTime, false, strLogPath, SystemConstants._Home_Controller_File_Log, extendedConfigLogger.getClassNameMethodName(), extendedConfigLogger.getExactMatch(), extendedConfigLogger.getLevel(), extendedConfigLogger.getLogIP(), extendedConfigLogger.getLogPort(), extendedConfigLogger.getHTTPLogURL(), extendedConfigLogger.getHTTPLogUser(), extendedConfigLogger.getHTTPLogPassword(), extendedConfigLogger.getProxyIP(), extendedConfigLogger.getProxyPort(), extendedConfigLogger.getProxyUser(), extendedConfigLogger.getProxyPassword() );
+                controllerLogger.setupLogger( strOperator + " " + strLoginDateTime, false, strLogPath, strLoggerFileName, extendedConfigLogger.getClassNameMethodName(), extendedConfigLogger.getExactMatch(), extendedConfigLogger.getLevel(), extendedConfigLogger.getLogIP(), extendedConfigLogger.getLogPort(), extendedConfigLogger.getHTTPLogURL(), extendedConfigLogger.getHTTPLogUser(), extendedConfigLogger.getHTTPLogPassword(), extendedConfigLogger.getProxyIP(), extendedConfigLogger.getProxyPort(), extendedConfigLogger.getProxyUser(), extendedConfigLogger.getProxyPassword() );
             else    //Si no usamos la por defecto
-                controllerLogger.setupLogger( strOperator + " " + strLoginDateTime, false, strLogPath, SystemConstants._Home_Controller_File_Log, SystemConstants._Log_Class_Method, SystemConstants._Log_Exact_Match, SystemConstants._Log_Level, "", -1, "", "", "", "", -1, "", "" );
+                controllerLogger.setupLogger( strOperator + " " + strLoginDateTime, false, strLogPath, strLoggerFileName, SystemConstants._Log_Class_Method, SystemConstants._Log_Exact_Match, SystemConstants._Log_Level, "", -1, "", "", "", "", -1, "", "" );
 
             //Inicializamos el lenguage para ser usado por el logger
-            controllerLanguage = CLanguage.getLanguage( controllerLogger, strRunningPath + SystemConstants._Langs_Dir + SystemConstants._Home_Controller_Logger_Name + "." + SystemConstants._Lang_Ext ); 
+            controllerLanguage = CLanguage.getLanguage( controllerLogger, strRunningPath + SystemConstants._Langs_Dir + strLoggerName + "." + SystemConstants._Lang_Ext ); 
 
             //Protección para el multi hebrado, puede que dos usuarios accedan exactamente al mismo tiempo a la página web, este código en el servidor se ejecuta en dos hebras
             synchronized( currentSession ) { //Aquí entra un asunto de habras y acceso multiple de varias hebras a la misma variable
@@ -87,7 +93,7 @@ public class CHomeController extends SelectorComposer<Component> {
                     synchronized( loggedSessionLoggers ) {
 
                         //Lo agregamos a la lista
-                        loggedSessionLoggers.add( SystemConstants._Home_Controller_Logger_Name + " " + strOperator + " " + strLoginDateTime );
+                        loggedSessionLoggers.add( strLoggerName + " " + strOperator + " " + strLoginDateTime );
 
                     }
 
@@ -109,7 +115,7 @@ public class CHomeController extends SelectorComposer<Component> {
          
             super.doAfterCompose( comp );
 
-            String strRunningPath = Sessions.getCurrent().getWebApp().getRealPath( SystemConstants._WEB_INF_Dir ) + File.separator;
+            final String strRunningPath = Sessions.getCurrent().getWebApp().getRealPath( SystemConstants._WEB_INF_Dir ) + File.separator;
             
             //Inicializamos el logger y el language
             initcontrollerLoggerAndcontrollerLanguage( strRunningPath, Sessions.getCurrent() );
@@ -124,10 +130,21 @@ public class CHomeController extends SelectorComposer<Component> {
     
     
     }    
+
+    @Listen( "onClick = #includeNorthContent #buttonChangePassword" )  
+    public void onClickbuttonChangePassword( Event event ) {
+
+        if ( controllerLogger != null )
+            controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Button change password clicked" ) );
+        
+    }    
     
     @SuppressWarnings( { "unchecked", "rawtypes" } )
     @Listen( "onClick = #includeNorthContent #buttonLogout" )  
     public void onClickbuttonLogout( Event event ) {
+        
+        if ( controllerLogger != null )
+            controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Button change password clicked" ) );
         
         Messagebox.show( "You are sure do you want logout from system?", "Logout", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
             
@@ -135,17 +152,42 @@ public class CHomeController extends SelectorComposer<Component> {
                 
                 if ( evt.getName().equals( "onOK" ) ) {
                     
+                    if ( controllerLogger != null )
+                        controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Logout confirm accepted" ) );
+                    
                     //Ok aquí vamos hacer el logout
                     Sessions.getCurrent().invalidate(); //Listo obliga limpiar la sessión mejor que ir removeAttribute a removeAttribute
                    
                     Executions.sendRedirect( "/index.zul"); //Lo enviamos al login
                     
-                } 
+                }
+                else {
+                    
+                    if ( controllerLogger != null )
+                        controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Logout confirm canceled" ) );
+                    
+                }
                 
             }
             
         });         
         
     }
+    
+    @Listen( "onClick = #buttonPersonManager" )  
+    public void onClickbuttonPersonManager( Event event ) {
+        
+        if ( controllerLogger != null )
+            controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Button person manager clicked" ) );
+
+        Map<String,Object> params = new HashMap<String,Object>();
+        
+        params.put( "callerComponent", event.getTarget() ); //Le paso el boton que llamo al evento event.getTarget()
+        //arg.put("someName", someValue);
+        Window win = (Window) Executions.createComponents( "/views/person/manager/manager.zul", null, params ); //attach to page as root if parent is null
+        
+        win.doModal();
+        
+    }    
     
 }

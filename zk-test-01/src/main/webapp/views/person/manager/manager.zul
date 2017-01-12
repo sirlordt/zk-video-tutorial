@@ -2,7 +2,7 @@
 <?init class="org.test.zk.security.CCheckAuthenticated"?>
 <zk>
 
-  <window xmlns:w="client" position="center, center" apply="org.test.zk.controllers.person.manager.CManagerController" title="Person manager" border="normal" hflex="min">
+  <window id="windowPersonManager" xmlns:w="client" position="center, center" apply="org.test.zk.controllers.person.manager.CManagerController" title="Person manager" border="normal" hflex="min">
   
     <vlayout width="543px">
 
@@ -23,7 +23,8 @@
       
       <div id="divButtonContainer" >
      
-        <button id="buttonConnectionToDB" label="Connect"/>
+        <button id="buttonClose" label="Close" style="float:right;margin-left:5px;" />
+        <!-- <button id="buttonConnectionToDB" label="Connect"/> -->
         <button id="buttonRefresh" label="Refresh"/>
         <button id="buttonDelete" label="Delete" style="float:right;margin-left:5px;" />
         <button id="buttonModify" label="Modify" style="float:right;margin-left:5px;" />
