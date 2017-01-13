@@ -12,12 +12,18 @@
     </north>
     
     <center id="mainContent" autoscroll="true" border="none">
-      
-       <div>
-       
-         <button id="buttonPersonManager" label="Person Manager"/>
-       
-       </div>      
+
+      <tabbox id="tabboxMainContent" width="100%" height="100%">
+   
+        <tabs id="tabboxTabs">
+     
+        </tabs>
+            
+        <tabpanels id="tabboxPanels">
+     
+        </tabpanels>
+   
+      </tabbox>
       
     </center>
     

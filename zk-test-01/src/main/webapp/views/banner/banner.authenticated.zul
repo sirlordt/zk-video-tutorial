@@ -4,6 +4,8 @@
 
   <div hflex="1" vflex="1" sclass="banner">
 
+    <timer id="timerKeepAliveSession" repeats="true" delay="120000"/>
+
     <hbox hflex="1" vflex="1" align="center">
 
       <a href="http://www.lutorcorp.com/">
@@ -14,7 +16,7 @@
 
       <div width="400px">
 
-        <label id="lbHeader" value="" sclass="banner-head"/>
+        <label id="labelHeader" value="" sclass="banner-head"/>
 
       </div>
 

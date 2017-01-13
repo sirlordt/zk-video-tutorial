@@ -1,0 +1,13 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?init class="org.test.zk.security.CCheckAuthenticated"?>
+<zk>
+
+  <tab id="tabAdmin" label="Admin"/> <!-- Pestaña -->
+  
+  <tabpanel id="tabAdminPanel" apply="org.test.zk.controllers.tab.admin.CTabAdminController" > <!-- Panel de contenido de la pestaña -->
+  
+    <button id="buttonPersonManager" label="Person Manager"/>
+  
+  </tabpanel>      
+
+</zk>

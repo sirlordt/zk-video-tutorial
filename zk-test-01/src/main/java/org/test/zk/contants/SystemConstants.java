@@ -65,5 +65,11 @@ public class SystemConstants {
 
     public static final String _Person_Editor_Controller_Logger_Name = "person_editor_controller";
     public static final String _Person_Editor_Controller_File_Log = "person_editor_controller.log";
+
+    public static final String _Tab_Home_Controller_Logger_Name = "tab_home_controller";
+    public static final String _Tab_Home_Controller_File_Log = "tab_home_controller.log";
+
+    public static final String _Tab_Admin_Controller_Logger_Name = "tab_admin_controller";
+    public static final String _Tab_Admin_Controller_File_Log = "tab_admin_controller.log";
     
 }

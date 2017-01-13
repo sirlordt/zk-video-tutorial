@@ -1,0 +1,15 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?init class="org.test.zk.security.CCheckAuthenticated"?>
+<zk>
+
+  <tab id="tabHome" label="Home"/> <!-- Pestaña -->
+  
+  <tabpanel id="tabHomePanel" apply="org.test.zk.controllers.tab.home.CTabHomeController" > <!-- Panel de contenido de la pestaña -->
+  
+    <image src="/resources/images/logo-400x322.png" width="300px" sclass="centered"/>
+
+    <label id="labelWelcome" value="Welcome!" sclass="welcome"/>
+  
+  </tabpanel>      
+
+</zk>

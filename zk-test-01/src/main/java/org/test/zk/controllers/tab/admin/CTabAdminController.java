@@ -1,7 +1,9 @@
-package org.test.zk.controllers.home;
+package org.test.zk.controllers.tab.admin;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.test.zk.contants.SystemConstants;
 import org.test.zk.database.datamodel.TBLOperator;
@@ -13,32 +15,19 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
-import org.zkoss.zk.ui.select.annotation.Wire;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Tab;
-import org.zkoss.zul.Tabbox;
-import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Window;
 
 import commonlibs.commonclasses.CLanguage;
 import commonlibs.commonclasses.ConstantsCommonClasses;
 import commonlibs.extendedlogger.CExtendedConfigLogger;
 import commonlibs.extendedlogger.CExtendedLogger;
 import commonlibs.utils.Utilities;
-import commonlibs.utils.ZKUtilities;
 
 
-public class CHomeController extends SelectorComposer<Component> {
+public class CTabAdminController extends SelectorComposer<Component> {
 
-    private static final long serialVersionUID = 1040032932048818844L;
-
-    //Lo mismo para que la variable haga bien el binding se necestan los dos id
-    @Wire( "#includeNorthContent #labelHeader" )
-    Label labelHeader;
-    
-    @Wire
-    Tabbox tabboxMainContent;
+    private static final long serialVersionUID = -4000128401572294123L;
+ 
     
     protected CExtendedLogger controllerLogger = null;
     
@@ -63,8 +52,8 @@ public class CHomeController extends SelectorComposer<Component> {
         if ( strLoginDateTime == null ) //En caso de ser null no ha fecha y hora de inicio de sesión colocarle una por defecto
             strLoginDateTime = Utilities.getDateInFormat( ConstantsCommonClasses._Global_Date_Time_Format_File_System_24, null );
 
-        final String strLoggerName = SystemConstants._Home_Controller_Logger_Name;
-        final String strLoggerFileName = SystemConstants._Home_Controller_File_Log;
+        final String strLoggerName = SystemConstants._Tab_Admin_Controller_Logger_Name;
+        final String strLoggerFileName = SystemConstants._Tab_Admin_Controller_File_Log;
         
         //Aqui creamos el logger para el operador que inicio sesión login en el sistem
         controllerLogger = CExtendedLogger.getLogger( strLoggerName + " " + strOperator + " " + strLoginDateTime );
@@ -119,78 +108,6 @@ public class CHomeController extends SelectorComposer<Component> {
     
     }
     
-    public void initView() {
-        
-        TBLOperator tblOperator = (TBLOperator) Sessions.getCurrent().getAttribute( SystemConstants._Operator_Credential_Session_Key ); 
-        
-        if ( tblOperator != null ) {
-            
-            if ( labelHeader != null ) {
-                
-                labelHeader.setValue( tblOperator.getRole() );
-                
-            }
-            
-        }
-
-        //Aqui iniciamos los tab de manera dinámica
-        
-        
-        //El home lo mostramos a todos los operadores
-        //Creamos el componente a partir del .zul, createComponents crea un arreglo con los dos componentes raices 
-        Component[] components = Executions.getCurrent().createComponents( "/views/tabs/home/tabhome.zul", null );
-        
-        //Buscamos el componente de tipo tab
-        Tab tab = (Tab) ZKUtilities.getComponent( components, "Tab" );      
-        
-        if ( tab != null ) {
-            
-            //Lo anexamos de manera dinámica a su padre el tabbox del home.zul
-            tabboxMainContent.getTabs().appendChild( tab );
-            
-            //Buscamos el componente de tipo tabpanel
-            Tabpanel tabPanel = (Tabpanel) ZKUtilities.getComponent( components, "Tabpanel" );      
-            
-            //Lo anexamos de manera dinámica a su padre el tabbox del home.zul
-            if ( tabPanel != null )
-                tabboxMainContent.getTabpanels().appendChild( tabPanel );
-        
-        }
-        
-        if ( tblOperator.getRole().equalsIgnoreCase( "admin" ) ) {
-            
-            //Creamos el componente a partir del .zul, createComponents crea un arreglo con los dos componentes raices 
-            components = Executions.getCurrent().createComponents( "/views/tabs/admin/tabadmin.zul", null );
-            
-            //Buscamos el componente de tipo tab
-            tab = (Tab) ZKUtilities.getComponent( components, "Tab" );      
-            
-            if ( tab != null ) {
-                
-                //Lo anexamos de manera dinámica a su padre el tabbox del home.zul
-                tabboxMainContent.getTabs().appendChild( tab );
-                
-                //Buscamos el componente de tipo tabpanel
-                Tabpanel tabPanel = (Tabpanel) ZKUtilities.getComponent( components, "Tabpanel" );      
-                
-                //Lo anexamos de manera dinámica a su padre el tabbox del home.zul
-                if ( tabPanel != null )
-                    tabboxMainContent.getTabpanels().appendChild( tabPanel );
-            
-            }
-            
-        }
-        else if ( tblOperator.getRole().equalsIgnoreCase( "operator.type1" ) ) {
-            
-            
-        }
-        else if ( tblOperator.getRole().equalsIgnoreCase( "operator.type2" ) ) {
-            
-            
-        }
-        
-    }
-    
     @Override
     public void doAfterCompose( Component comp ) {
         
@@ -203,7 +120,6 @@ public class CHomeController extends SelectorComposer<Component> {
             //Inicializamos el logger y el language
             initcontrollerLoggerAndcontrollerLanguage( strRunningPath, Sessions.getCurrent() );
     
-            initView();
             
         }
         catch ( Exception ex ) {
@@ -214,58 +130,21 @@ public class CHomeController extends SelectorComposer<Component> {
         }
     
     }    
-
     
-    @Listen("onTimer=#includeNorthContent #timerKeepAliveSession" )
-    public void onTimer( Event event ) {
+    @Listen( "onClick = #buttonPersonManager" )  
+    public void onClickbuttonPersonManager( Event event ) {
         
-        //Este evento se ejecutara cada 120000 milisegundos 1 minuto aprox, esto no es un relog atomico a si que son tiempos aproximados
-        //Muestra un tablerito en la parte superior central de la pantalla
-        Clients.showNotification( "Automatic renewal of the session successful", "info",  null, "before_center", 2000, true );
-        
-    }
-    
-    @Listen( "onClick = #includeNorthContent #buttonChangePassword" )  
-    public void onClickbuttonChangePassword( Event event ) {
-
         if ( controllerLogger != null )
-            controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Button change password clicked" ) );
+            controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Button person manager clicked" ) );
+
+        Map<String,Object> params = new HashMap<String,Object>();
+        
+        params.put( "callerComponent", event.getTarget() ); //Le paso el boton que llamo al evento event.getTarget()
+        //arg.put("someName", someValue);
+        Window win = (Window) Executions.createComponents( "/views/person/manager/manager.zul", null, params ); //attach to page as root if parent is null
+        
+        win.doModal();
         
     }    
-    
-    @SuppressWarnings( { "unchecked", "rawtypes" } )
-    @Listen( "onClick = #includeNorthContent #buttonLogout" )  
-    public void onClickbuttonLogout( Event event ) {
-        
-        if ( controllerLogger != null )
-            controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Button change password clicked" ) );
-        
-        Messagebox.show( "You are sure do you want logout from system?", "Logout", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
-            
-            public void onEvent(Event evt) throws InterruptedException {
-                
-                if ( evt.getName().equals( "onOK" ) ) {
-                    
-                    if ( controllerLogger != null )
-                        controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Logout confirm accepted" ) );
-                    
-                    //Ok aquí vamos hacer el logout
-                    Sessions.getCurrent().invalidate(); //Listo obliga limpiar la sessión mejor que ir removeAttribute a removeAttribute
-                   
-                    Executions.sendRedirect( "/index.zul"); //Lo enviamos al login
-                    
-                }
-                else {
-                    
-                    if ( controllerLogger != null )
-                        controllerLogger.logMessage( "1" , CLanguage.translateIf( controllerLanguage, "Logout confirm canceled" ) );
-                    
-                }
-                
-            }
-            
-        });         
-        
-    }
     
 }
